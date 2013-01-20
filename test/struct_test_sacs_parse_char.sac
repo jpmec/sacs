@@ -1,0 +1,5 @@
+struct_begin(struct_test_sacs_parse_char)
+
+  char__(char_value)
+
+struct_end(struct_test_sacs_parse_char)

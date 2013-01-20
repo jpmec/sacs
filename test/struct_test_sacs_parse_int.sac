@@ -1,0 +1,5 @@
+struct_begin(struct_test_sacs_parse_int)
+
+  int__(int_value)
+
+struct_end(struct_test_sacs_parse_int)
