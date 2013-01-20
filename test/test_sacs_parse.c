@@ -17,116 +17,143 @@ static void test_sacs_parse_bool(void)
 {
   printf("%s\n", __FUNCTION__);
   
-  struct struct_test_sacs_parse_bool test_struct = {0};
-
   
-  const char test_parse_bool_string1[] = 
-  "  (struct TestSacsStruct) {  "
-  "    .bool_value = true,      "
-  "  };                         ";   
-  
-  const size_t parse_result1 = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string1);
-  assert(parse_result1 == strlen(test_parse_bool_string1));
-
-  assert(true == test_struct.bool_value);
-  
-  
-  const char test_parse_bool_string2[] = 
-  "  (struct TestSacsStruct) {  "
-  "    .bool_value = false,     "
-  "  };                         "; 
+  // Test true
+  {
+    const bool expect = true;
     
-  const size_t parse_result2 = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string2);
-  assert(parse_result2 == strlen(test_parse_bool_string2));
-  
-  assert(false == test_struct.bool_value);
-  
-  
-  const char test_parse_bool_string3[] = 
-  "  (struct TestSacsStruct) {  "
-  "    .bool_value = 0,         "
-  "  };                         "; 
+    const char test_parse_bool_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .bool_value = true,      "
+    "  };                         ";   
 
-  const size_t parse_result3 = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string3);
-  assert(parse_result3 == strlen(test_parse_bool_string3));
+    struct struct_test_sacs_parse_bool test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string);
+    assert(parse_result == strlen(test_parse_bool_string));
+
+    assert(expect == test_struct.bool_value);
+  }
   
-  assert(false == test_struct.bool_value);
+  
+  // Test false
+  {
+    const bool expect = false;
+    
+    const char test_parse_bool_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .bool_value = false,     "
+    "  };                         "; 
+
+    struct struct_test_sacs_parse_bool test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string);
+    assert(parse_result == strlen(test_parse_bool_string));
+  
+    assert(expect == test_struct.bool_value);
+  }
+  
+  
+  // Test 0
+  {
+    const bool expect = 0;
+    
+    const char test_parse_bool_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .bool_value = 0,         "
+    "  };                         "; 
+
+    struct struct_test_sacs_parse_bool test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string);
+    assert(parse_result == strlen(test_parse_bool_string));
+  
+    assert(expect == test_struct.bool_value);
+  }
+  
+  
+  // Test 1
+  {
+    const bool expect = 1;
+    
+    const char test_parse_bool_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .bool_value = 1,         "
+    "  };                         "; 
+  
+    struct struct_test_sacs_parse_bool test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string);
+    assert(parse_result == strlen(test_parse_bool_string));
+  
+    assert(expect == test_struct.bool_value);  
+  }
+  
+  
+  // Test 2
+  {
+    const bool expect = 2;
+    
+    const char test_parse_bool_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .bool_value = 2,         "
+    "  };                         "; 
+  
+    struct struct_test_sacs_parse_bool test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string);
+    assert(parse_result == strlen(test_parse_bool_string));
+  
+    assert(expect == test_struct.bool_value);
+  }
 
   
-  const char test_parse_bool_string4[] = 
-  "  (struct TestSacsStruct) {  "
-  "    .bool_value = 1,         "
-  "  };                         "; 
-  
-  const size_t parse_result4 = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string4);
-  assert(parse_result4 == strlen(test_parse_bool_string4));
-  
-  assert(true == test_struct.bool_value);  
-  
-  
-  const char test_parse_bool_string5[] = 
-  "  (struct TestSacsStruct) {  "
-  "    .bool_value = 2,         "
-  "  };                         "; 
-  
-  const size_t parse_result5 = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string5);
-  assert(parse_result5 == strlen(test_parse_bool_string5));
-  
-  assert(true == test_struct.bool_value);
-  
+  // Test 01
+  {
+    const bool expect = 2;
+    
+    const char test_parse_bool_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .bool_value = 01,        "
+    "  };                         "; 
 
-  const char test_parse_bool_string6[] = 
-  "  (struct TestSacsStruct) {  "
-  "    .bool_value = 01,        "
-  "  };                         "; 
+    struct struct_test_sacs_parse_bool test_struct = {0};    
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string);
+    assert(parse_result == strlen(test_parse_bool_string));
+  
+    assert(expect == test_struct.bool_value);  
+  }
+  
+  
+  // Test missing field
+  {
+    const char test_parse_bool_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "  };                         "; 
+  
+    struct struct_test_sacs_parse_bool test_struct = {0};    
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string);
+    assert(parse_result == strlen(test_parse_bool_string));
+  
+    assert(false == test_struct.bool_value);  
+  }
+  
+  // Test invalid string
+  {
+    const char test_parse_bool_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .bool_value =,           "
+    "  };                         "; 
 
-  const size_t parse_result6 = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string6);
-  assert(parse_result6 == strlen(test_parse_bool_string6));
+    struct struct_test_sacs_parse_bool test_struct = {0};    
   
-  assert(true == test_struct.bool_value);  
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string);
+    assert(parse_result == strlen(test_parse_bool_string));
   
-  
-  const char test_parse_bool_string7[] = 
-  "  (struct TestSacsStruct) {  "
-  "  };                         "; 
-  
-  const size_t parse_result7 = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string7);
-  assert(parse_result7 == strlen(test_parse_bool_string7));
-  
-  assert(false == test_struct.bool_value);  
-  
-  
-  const char test_parse_bool_string8[] = 
-  "  (struct TestSacsStruct) {  "
-  "    .bool_value =,           "
-  "  };                         "; 
-  
-  const size_t parse_result8 = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string8);
-  assert(parse_result8 == strlen(test_parse_bool_string8));
-  
-  assert(false == test_struct.bool_value);  
-  
-  
-  const char test_parse_bool_string9[] = 
-  "  (struct TestSacsStruct) {  "
-  "    .bool_value = ,          "
-  "  };                         "; 
-  
-  const size_t parse_result9 = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string9);
-  assert(parse_result9 == strlen(test_parse_bool_string9));
-  
-  assert(false == test_struct.bool_value);  
-  
-  
-  const char test_parse_bool_string10[] = 
-  "  (struct TestSacsStruct) {  "
-  "    .bool_value = hello,     "
-  "  };                         "; 
-  
-  const size_t parse_result10 = SACS_PARSE_TYPE(struct_test_sacs_parse_bool, &test_struct, test_parse_bool_string10);
-  assert(parse_result10 == strlen(test_parse_bool_string10));
-  
-  assert(true == test_struct.bool_value);   
+    assert(false == test_struct.bool_value);  
+  }
 }
 
 
@@ -351,6 +378,185 @@ static void test_sacs_parse_chars(void)
 
 
 
+
+
+#include "struct_test_sacs_parse_double.h"
+
+
+static void test_sacs_parse_double(void)
+{
+  printf("%s\n", __FUNCTION__);
+  
+  
+  // Test 0
+  {
+    double expect = 0;
+    
+    const char test_parse_double_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .double_value = 0,          "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_double test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_double, &test_struct, test_parse_double_string);
+    assert(parse_result == strlen(test_parse_double_string));
+    
+    assert(expect == test_struct.double_value);
+  }
+  
+  
+  // Test 1
+  {
+    double expect = 1;
+    
+    const char test_parse_double_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .double_value = 1,          "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_double test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_double, &test_struct, test_parse_double_string);
+    assert(parse_result == strlen(test_parse_double_string));
+    
+    assert(expect == test_struct.double_value);
+  }
+  
+  
+  // Test 01
+  {
+    double expect = 01;
+    
+    const char test_parse_double_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .double_value = 01,         "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_double test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_double, &test_struct, test_parse_double_string);
+    assert(parse_result == strlen(test_parse_double_string));
+    
+    assert(expect == test_struct.double_value);
+  }
+  
+  
+  // Test 'a'
+  {
+    double expect = 'a';
+    
+    const char test_parse_double_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .double_value = 'a',        "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_double test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_double, &test_struct, test_parse_double_string);
+    assert(parse_result == strlen(test_parse_double_string));
+    
+    assert(expect == test_struct.double_value);
+  }
+  
+  
+  // Test 0x1
+  {
+    double expect = 0x1;
+    
+    const char test_parse_double_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .double_value = 0x1,        "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_double test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_double, &test_struct, test_parse_double_string);
+    assert(parse_result == strlen(test_parse_double_string));
+    
+    assert(expect == test_struct.double_value);
+  }
+  
+  
+  // Test 0xABCDEF
+  {
+    double expect = 0xABCDEF;
+    
+    const char test_parse_double_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .double_value = 0xABCDEF,   "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_double test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_double, &test_struct, test_parse_double_string);
+    assert(parse_result == strlen(test_parse_double_string));
+    
+    assert(expect == test_struct.double_value);
+  }
+  
+  
+  // Test 0b1
+  {
+    double expect = 1;  // Note, C does not support 0b prefix
+    
+    const char test_parse_double_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .double_value = 0b1,        "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_double test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_double, &test_struct, test_parse_double_string);
+    assert(parse_result == strlen(test_parse_double_string));
+    
+    assert(expect == test_struct.double_value);
+  }
+  
+  
+  // Test 0b01
+  {
+    double expect = 1;  // Note, C does not support 0b prefix
+    
+    const char test_parse_double_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .double_value = 0b01,        "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_double test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_double, &test_struct, test_parse_double_string);
+    assert(parse_result == strlen(test_parse_double_string));
+    
+    assert(expect == test_struct.double_value);
+  }
+  
+  
+  // Test 0b101
+  {
+    double expect = 5;  // Note, C does not support 0b prefix
+    
+    const char test_parse_double_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .double_value = 0b101,        "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_double test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_double, &test_struct, test_parse_double_string);
+    assert(parse_result == strlen(test_parse_double_string));
+    
+    assert(expect == test_struct.double_value);
+  }  
+  
+}
+
+
+
+
+
+
+
 #include "struct_test_sacs_parse_int.h"
 
 
@@ -521,6 +727,11 @@ static void test_sacs_parse_int(void)
   }  
 
 }
+
+
+
+
+
 
 
 
