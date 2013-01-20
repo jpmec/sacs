@@ -538,17 +538,31 @@ size_t sacs_parse_double(struct SacsStructParser* parser, void* dest, size_t des
     char_ptr += count;
   }
   
-  // check for hex
-  char* end_ptr = 0;
-  double value = strtod(char_ptr, &end_ptr);
-  
-  if (end_ptr)
+  if (SACS_CHAR_SINGLE_QUOTE == char_ptr[0])
   {
-    count = end_ptr - char_ptr;
-    char_ptr += count;
+    char c = 0;
+    count = sacs_parse_char(parser, &c, sizeof(char), char_ptr);
+    if (count)
+    {
+      char_ptr += count;
+      
+      double* double_ptr = dest;
+      *double_ptr = c;
+    }
+  }
+  else
+  {
+    char* end_ptr = 0;
+    double value = strtod(char_ptr, &end_ptr);
+  
+    if (end_ptr)
+    {
+      count = end_ptr - char_ptr;
+      char_ptr += count;
     
-    double* double_ptr = dest;
-    *double_ptr = value;
+      double* double_ptr = dest;
+      *double_ptr = value;
+    }
   }
   
   count = sacs_skip_isspace(char_ptr);
@@ -651,6 +665,7 @@ size_t sacs_parse_int(struct SacsStructParser* parser, void* dest, size_t dest_s
   // reset value count
   count = 0;
 
+  // look for special prefixes such as 0x
   if (('0' == str[0]) )
   {
     int base = 10;
@@ -665,7 +680,6 @@ size_t sacs_parse_int(struct SacsStructParser* parser, void* dest, size_t dest_s
       } break; 
     }
     
-    // try to convert hexadecimal
     char* end_ptr = 0;
     long value = strtol(char_ptr, &end_ptr, base);
     
@@ -793,6 +807,44 @@ size_t sacs_parse_long_array(struct SacsStructParser* parser, void* dest, size_t
 
 
 
+size_t sacs_parse_unsigned_int(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str)
+{
+  assert(dest);
+  assert(dest_size);
+  assert(str);
+  
+  unsigned long result = 0;
+  size_t count = sacs_parse_unsigned_long(parser, &result, sizeof(result), str);
+  
+  if (count)
+  {
+    if (result > UINT32_MAX)
+    {
+      return 0;
+    }    
+    
+    unsigned int* unsigned_int_ptr = (unsigned int*) dest;
+    *unsigned_int_ptr = -1 & result;
+  }
+  
+  return count;
+}
+
+
+
+
+size_t sacs_parse_unsigned_int_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str)
+{
+  assert(dest);
+  assert(dest_size);
+  assert(str);
+  
+  return sacs_parse_array(parser, dest, dest_size, str, sizeof(unsigned int), sacs_parse_unsigned_int);
+}
+
+
+
+
 size_t sacs_parse_unsigned_long(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str)
 {
   assert(dest);
@@ -808,26 +860,55 @@ size_t sacs_parse_unsigned_long(struct SacsStructParser* parser, void* dest, siz
     char_ptr += count;
   }
   
-  // check for hex
-  char* end_ptr = 0;
-  unsigned long value = 0;
+  count = 0;
   
-  if (0 == strncmp("0x", char_ptr, 2))
+  if (SACS_CHAR_SINGLE_QUOTE == char_ptr[0])
   {
-    value = strtoul(char_ptr, &end_ptr, 16);  // hexadecimal conversion
+    char c = 0;
+    
+    count = sacs_parse_char(parser, &c, sizeof(char), str);
+    
+    if (count)
+    {
+      char_ptr += count;
+      unsigned long* unsigned_long_ptr = (unsigned long*) dest;
+      *unsigned_long_ptr = c;
+    }
   }
+  
   else
   {
-    value = strtoul(char_ptr, &end_ptr, 10);  // decimal conversion
-  }
+    // check for hex
+    char* end_ptr = 0;
+    unsigned long value = 0;
   
-  if (end_ptr)
-  {
-    count = end_ptr - char_ptr;
-    char_ptr += count;
+    int base = 10;
     
-    unsigned long* unsigned_long_ptr = dest;
-    *unsigned_long_ptr = value;
+    // look for special prefixes such as 0x
+    if (('0' == str[0]) )
+    {
+
+      switch (str[1])
+      {
+        case 'x': base = 16; break;
+        case 'b': 
+        {
+          base = 2;
+          char_ptr += 2;
+        } break; 
+      }
+    }
+
+    value = strtoul(char_ptr, &end_ptr, base);
+    
+    if (end_ptr)
+    {
+      count = end_ptr - char_ptr;
+      char_ptr += count;
+    
+      unsigned long* unsigned_long_ptr = dest;
+      *unsigned_long_ptr = value;
+    }
   }
   
   count = sacs_skip_isspace(char_ptr);

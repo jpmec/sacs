@@ -54,6 +54,14 @@ SACS_PARSE_INT_ARRAY(SACS_STRUCT, _field_name_, _size_),
   SACS_PARSE_LONG_ARRAY(SACS_STRUCT, _field_name_, _size_),
 
 
+#define sacs_unsigned_int(_field_name_) \
+  SACS_PARSE_UNSIGNED_INT(SACS_STRUCT, _field_name_),
+
+
+#define sacs_unsigned_int_array(_field_name_, _size_) \
+  SACS_PARSE_UNSIGNED_INT_ARRAY(SACS_STRUCT, _field_name_, _size_),
+
+
 #define sacs_unsigned_long(_field_name_) \
   SACS_PARSE_UNSIGNED_LONG(SACS_STRUCT, _field_name_),
 

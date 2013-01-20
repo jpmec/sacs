@@ -46,6 +46,12 @@
 #define SACS_PARSE_LONG_ARRAY(_type_name_, _field_name_, _size_) \
   SACS_PARSE_FIELD(_type_name_, _field_name_, sacs_parse_long_array, _size_ * sizeof(long))
 
+#define SACS_PARSE_UNSIGNED_INT(_type_name_, _field_name_) \
+  SACS_PARSE_FIELD(_type_name_, _field_name_, sacs_parse_unsigned_int, sizeof(unsigned int))
+
+#define SACS_PARSE_UNSIGNED_INT_ARRAY(_type_name_, _field_name_, _size_) \
+  SACS_PARSE_FIELD(_type_name_, _field_name_, sacs_parse_unsigned_int_array, _size_ * sizeof(unsigned int))
+
 #define SACS_PARSE_UNSIGNED_LONG(_type_name_, _field_name_) \
   SACS_PARSE_FIELD(_type_name_, _field_name_, sacs_parse_unsigned_long, sizeof(unsigned long))
 
@@ -282,6 +288,7 @@ size_t sacs_parse_char(struct SacsStructParser* parser, void* dest, size_t dest_
 
 
 /** Parse an array of characters.
+ *  Array is not required to be null-terminated.
  *  Returns number of chars parsed.
  */
 size_t sacs_parse_char_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
@@ -293,10 +300,34 @@ size_t sacs_parse_char_array(struct SacsStructParser* parser, void* dest, size_t
 size_t sacs_parse_char_string(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
 
 
+/** Parse a double using strtod.
+ *  Returns number of chars parsed. 
+ */
+size_t sacs_parse_double(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+
+
+/** Parse an array of doubles using strtod.
+ *  Returns number of chars parsed. 
+ */
+size_t sacs_parse_double_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+
+
 /** Parse an enumeration.
  *  Returns number of chars parsed.
  */
 size_t sacs_parse_enum(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+
+
+/** Parse a float using atof.
+ *  Returns number of chars parsed. 
+ */
+size_t sacs_parse_float(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+
+
+/** Parse an array of floats using atof.
+ *  Returns number of chars parsed. 
+ */
+size_t sacs_parse_float_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
 
 
 /** Parse an int using strtol.
@@ -323,6 +354,18 @@ size_t sacs_parse_long(struct SacsStructParser* parser, void* dest, size_t dest_
 size_t sacs_parse_long_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
 
 
+/** Parse an unsigned int.
+ *  Returns number of chars parsed. 
+ */
+size_t sacs_parse_unsigned_int(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+
+
+/** Parse an unsigned int.
+ *  Returns number of chars parsed. 
+ */
+size_t sacs_parse_unsigned_int_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+
+
 /** Parse an unsigned long using strtoul.
  *  Returns number of chars parsed. 
  */
@@ -333,30 +376,6 @@ size_t sacs_parse_unsigned_long(struct SacsStructParser* parser, void* dest, siz
  *  Returns number of chars parsed. 
  */
 size_t sacs_parse_unsigned_long_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
-
-
-/** Parse a double using strtod.
- *  Returns number of chars parsed. 
- */
-size_t sacs_parse_double(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
-
-
-/** Parse an array of doubles using strtod.
- *  Returns number of chars parsed. 
- */
-size_t sacs_parse_double_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
-
-
-/** Parse a float using atof.
- *  Returns number of chars parsed. 
- */
-size_t sacs_parse_float(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
-
-
-/** Parse an array of floats using atof.
- *  Returns number of chars parsed. 
- */
-size_t sacs_parse_float_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
 
 
 /** Parse a uint8_t using strtoul.

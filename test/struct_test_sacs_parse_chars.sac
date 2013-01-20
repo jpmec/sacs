@@ -1,5 +1,5 @@
 struct_begin(struct_test_sacs_parse_chars)
 
-  chars__(chars_value, 128)
+  chars__(value, 128)
 
 struct_end(struct_test_sacs_parse_chars)
