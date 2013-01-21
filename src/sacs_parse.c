@@ -1099,7 +1099,6 @@ size_t sacs_parse_int32_array(struct SacsStructParser* parser, void* dest, size_
 
 
 
-
 size_t sacs_parse_float(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str)
 {
   assert(dest);
@@ -1115,18 +1114,34 @@ size_t sacs_parse_float(struct SacsStructParser* parser, void* dest, size_t dest
     char_ptr += count;
   }
   
-  char* end_ptr = 0;
-  const double double_value = strtod(char_ptr, &end_ptr);
   
-  if (end_ptr)
+  if (SACS_CHAR_SINGLE_QUOTE == char_ptr[0])
   {
-    count = end_ptr - char_ptr;
-    char_ptr += count;
-   
-    const float float_value = (float) double_value;    
-    float* float_ptr = dest;
-    *float_ptr = float_value;
+    char c = 0;
+    count = sacs_parse_char(parser, &c, sizeof(char), char_ptr);
+    if (count)
+    {
+      char_ptr += count;
+      
+      float* float_ptr = dest;
+      *float_ptr = c;
+    }
   }
+  else
+  {
+    char* end_ptr = 0;
+    const double value = strtod(char_ptr, &end_ptr);
+    
+    if (end_ptr)
+    {
+      count = end_ptr - char_ptr;
+      char_ptr += count;
+      
+      float* float_ptr = dest;
+      *float_ptr = value;
+    }
+  }   
+  
   
   count = sacs_skip_isspace(char_ptr);
   

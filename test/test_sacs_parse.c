@@ -583,6 +583,178 @@ static void test_sacs_parse_double(void)
 
 
 
+#include "struct_test_sacs_parse_float.h"
+
+
+static void test_sacs_parse_float(void)
+{
+  printf("%s\n", __FUNCTION__);
+  
+  
+  // Test 0.0
+  {
+    float expect = 0.0;
+    
+    const char test_parse_float_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .value = 0.0,            "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_float test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_float, &test_struct, test_parse_float_string);
+    assert(parse_result == strlen(test_parse_float_string));
+    
+    assert(expect == test_struct.value);
+  }
+  
+  
+  // Test 1.0
+  {
+    float expect = 1.0;
+    
+    const char test_parse_float_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .value = 1.0,            "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_float test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_float, &test_struct, test_parse_float_string);
+    assert(parse_result == strlen(test_parse_float_string));
+    
+    assert(expect == test_struct.value);
+  }
+  
+  
+  // Test 0.12345
+  {
+    float expect = 0.12345;
+    
+    const char test_parse_float_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .value = 0.12345,        "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_float test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_float, &test_struct, test_parse_float_string);
+    assert(parse_result == strlen(test_parse_float_string));
+    
+    assert(expect == test_struct.value);
+  }
+  
+  
+  // Test 9E3
+  {
+    float expect = 9E3;
+    
+    const char test_parse_float_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .value = 9E3,            "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_float test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_float, &test_struct, test_parse_float_string);
+    assert(parse_result == strlen(test_parse_float_string));
+    
+    assert(expect == test_struct.value);
+  }
+  
+  // Test 1
+  {
+    float expect = 1;
+    
+    const char test_parse_float_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .value = 1,          "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_float test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_float, &test_struct, test_parse_float_string);
+    assert(parse_result == strlen(test_parse_float_string));
+    
+    assert(expect == test_struct.value);
+  }
+  
+  
+  // Test 01
+  {
+    float expect = 01;
+    
+    const char test_parse_float_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .value = 01,         "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_float test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_float, &test_struct, test_parse_float_string);
+    assert(parse_result == strlen(test_parse_float_string));
+    
+    assert(expect == test_struct.value);
+  }
+  
+  
+  // Test 'a'
+  {
+    float expect = 'a';
+    
+    const char test_parse_float_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .value = 'a',        "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_float test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_float, &test_struct, test_parse_float_string);
+    assert(parse_result == strlen(test_parse_float_string));
+    
+    assert(expect == test_struct.value);
+  }
+  
+  
+  // Test 0x1
+  {
+    float expect = 0x1;
+    
+    const char test_parse_float_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .value = 0x1,        "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_float test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_float, &test_struct, test_parse_float_string);
+    assert(parse_result == strlen(test_parse_float_string));
+    
+    assert(expect == test_struct.value);
+  }
+  
+  
+  // Test 0xABCDEF
+  {
+    float expect = 0xABCDEF;
+    
+    const char test_parse_float_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .value = 0xABCDEF,   "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_float test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_float, &test_struct, test_parse_float_string);
+    assert(parse_result == strlen(test_parse_float_string));
+    
+    assert(expect == test_struct.value);
+  }
+  
+}
+
+
+
 
 
 #include "struct_test_sacs_parse_int.h"
@@ -1148,6 +1320,7 @@ void test_sacs_parse(void)
   test_sacs_parse_double();
   test_sacs_parse_int();
   test_sacs_parse_int_array();
+  test_sacs_parse_float();
   test_sacs_parse_unsigned_int();
   test_sacs_parse_unsigned_long();
 }

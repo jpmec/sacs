@@ -6,6 +6,7 @@
 
 
 #include "struct_test_sacs_snprintf_char.h"
+#include "struct_test_sacs_snprintf_chars.h"
 
 
 
@@ -28,6 +29,24 @@ static void test_cycle_sacs_snprintf_char(const char* expect_string, const char*
   assert(0 == strcmp(expect_string, result_string));  
 }
 
+
+
+
+static void test_cycle_sacs_snprintf_chars(const char* expect_string, const char* test_string)
+{
+  struct struct_test_sacs_snprintf_chars test_struct = {0};
+  
+  const size_t snprintf_result = SACS_PARSE_TYPE(struct_test_sacs_snprintf_chars, &test_struct, test_string);
+  assert(snprintf_result == strlen(test_string));
+  
+  char result_string[256] = {0};
+  struct SacsStructSnprintfFormat format = SACS_SNPRINTF_FORMAT_DEFAULT;
+  
+  const size_t result_string_size = SACS_SNPRINTF_TYPE(struct_test_sacs_snprintf_chars, &test_struct, result_string, sizeof(result_string), &format);  
+  assert(result_string_size == strlen(expect_string));
+  
+  assert(0 == strcmp(expect_string, result_string));  
+}
 
 
 
@@ -73,6 +92,21 @@ static void test_sacs_snprintf_char(void)
     const char expect_string[] = "{.value='\\001',}";
     
     test_cycle_sacs_snprintf_char(expect_string, test_string);     
+  }
+}
+
+
+
+
+static void test_sacs_snprintf_chars(void)
+{
+  printf("%s\n", __FUNCTION__);
+  
+  // Test 'a'
+  {
+    const char test_string[] = "{.value=\"Hello World\",}"; 
+    
+    test_cycle_sacs_snprintf_chars(test_string, test_string);
   }
 }
 
