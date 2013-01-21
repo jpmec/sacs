@@ -186,7 +186,11 @@ size_t sacs_parse_array(struct SacsStructParser* parser, void* dest, size_t dest
       dest += element_size;
       
       count = sacs_skip_char(char_ptr, parser->format.char_field_separator);
-      char_ptr += count;
+      
+      if (count)
+      {
+        char_ptr += count;
+      }
     }
   } while (--array_count);
   
@@ -345,7 +349,7 @@ size_t sacs_parse_char(struct SacsStructParser* parser, void* dest, size_t dest_
     {
       ++char_ptr;
       
-      c = * char_ptr;
+      c = *char_ptr;
       
       switch (c)
       {
@@ -367,11 +371,6 @@ size_t sacs_parse_char(struct SacsStructParser* parser, void* dest, size_t dest_
         case SACS_CHAR_QUESTION:
         {
           c = SACS_CHAR_QUESTION;
-        } break;          
-          
-        case '0':
-        {
-          c = 0;
         } break;
           
         case 'a':
@@ -410,7 +409,21 @@ size_t sacs_parse_char(struct SacsStructParser* parser, void* dest, size_t dest_
         } break;
           
         default:
-          return 0; // bad format
+        {
+          unsigned long long_value = 0;
+          --char_ptr;
+          count = sacs_parse_unsigned_long(parser, &long_value, sizeof(unsigned long), char_ptr);
+          
+          if (count)
+          {
+            c = 0xFF & long_value;
+            char_ptr += count;
+          }
+          else
+          {
+            return 0; // bad format
+          }
+        }
       }
     }
     
@@ -702,10 +715,14 @@ size_t sacs_parse_int(struct SacsStructParser* parser, void* dest, size_t dest_s
     if (end_ptr)
     {
       count = end_ptr - char_ptr;
-      char_ptr += count;
+      
+      if (count)
+      {
+        char_ptr += count;
     
-      int* long_ptr = dest;
-      *long_ptr = (int) value;
+        int* long_ptr = dest;
+        *long_ptr = (int) value;
+      }
     }
   }
   
@@ -721,12 +738,6 @@ size_t sacs_parse_int(struct SacsStructParser* parser, void* dest, size_t dest_s
       
       char_ptr += count;        
     }
-  }
-  
-  if (0 == count)
-  {
-    count = sacs_skip_field(parser, str);
-    char_ptr += count;
   }
   
   count = sacs_skip_isspace(char_ptr);
@@ -885,10 +896,9 @@ size_t sacs_parse_unsigned_long(struct SacsStructParser* parser, void* dest, siz
     int base = 10;
     
     // look for special prefixes such as 0x
-    if (('0' == str[0]) )
+    if ('0' == char_ptr[0])
     {
-
-      switch (str[1])
+      switch (char_ptr[1])
       {
         case 'x': base = 16; break;
         case 'b': 
@@ -898,7 +908,20 @@ size_t sacs_parse_unsigned_long(struct SacsStructParser* parser, void* dest, siz
         } break; 
       }
     }
-
+    else if (SACS_CHAR_BACKSLASH == char_ptr[0])
+    {
+      const char c1 = char_ptr[1];
+      if (isdigit(c1) && ('8' >= c1))
+      {
+        base = 8;
+        char_ptr += 1;
+      }
+      else
+      {
+        char_ptr += 2;
+      }
+    }
+    
     value = strtoul(char_ptr, &end_ptr, base);
     
     if (end_ptr)

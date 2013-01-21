@@ -23,6 +23,9 @@
 #define SACS_PARSE_H
 
 
+#include "sacs_const.h"
+
+
 
 
 #define SACS_PARSE_FIELD(_type_name_, _field_name_, _function_, _field_size_) \

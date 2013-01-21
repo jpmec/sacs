@@ -1,11 +1,13 @@
 
 
+#include <assert.h>
 #include <stdio.h>
+#include <string.h>
+
 
 #include "test_sacs_parse.h"
 
 #include "../src/sacs.h"
-#include "../src/sacs.c"
 
 
 
@@ -239,6 +241,33 @@ static void test_sacs_parse_char(void)
     assert(expect == test_struct.value);
   }
   
+  // Test '\31'
+  {
+    const char expect = '\31';  // will interpret as octal
+    
+    const char test_parse_char_string[] = "{.value = '\\31',}";   
+    
+    struct struct_test_sacs_parse_char test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_char, &test_struct, test_parse_char_string);
+    assert(parse_result == strlen(test_parse_char_string));
+    
+    assert(expect == test_struct.value);
+  }
+  
+  // Test '\99'
+  {
+    const char expect = 9;  // will discard the \9 and parse the 9
+    
+    const char test_parse_char_string[] = "{.value = '\\99',}";   
+    
+    struct struct_test_sacs_parse_char test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_char, &test_struct, test_parse_char_string);
+    assert(parse_result == strlen(test_parse_char_string));
+    
+    assert(expect == test_struct.value);
+  }
 }
 
 
@@ -676,6 +705,89 @@ static void test_sacs_parse_int(void)
 
 
 
+#include "struct_test_sacs_parse_int_array.h"
+
+
+static void test_sacs_parse_int_array(void)
+{
+  printf("%s\n", __FUNCTION__);
+  
+  // Test typical array
+  {
+    const int expect[] = {1, 2, 3};
+    
+    const char test_parse_int_array_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .value = {1, 2, 3},      "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_int_array test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_int_array, &test_struct, test_parse_int_array_string);
+    assert(parse_result == strlen(test_parse_int_array_string));
+    
+    assert(0 == memcmp(expect, test_struct.value, sizeof(expect)));
+  }
+  
+  // Test zero initialization
+  {
+    const char expect[] = {0};
+    
+    const char test_parse_int_array_string[] = 
+    "  (struct TestSacsStruct) { "
+    "    .value = {0},           "
+    "  };                        ";   
+    
+    struct struct_test_sacs_parse_int_array test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_int_array, &test_struct, test_parse_int_array_string);
+    assert(parse_result == strlen(test_parse_int_array_string));
+    
+    assert(0 == memcmp(expect, test_struct.value, sizeof(expect)));
+  }
+  
+  
+  // Test array
+  {
+    const int expect[] = {'h', 'i', '\0'};
+    
+    const char test_parse_int_array_string[] = 
+    "  (struct TestSacsStruct) {           "
+    "    .value = {'h', 'i', '\\0'},  "
+    "  };                                  ";   
+    
+    struct struct_test_sacs_parse_int_array test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_int_array, &test_struct, test_parse_int_array_string);
+    
+    size_t expect_parse_result = strlen(test_parse_int_array_string);
+    assert(expect_parse_result == parse_result);
+    
+    assert(0 == memcmp(expect, test_struct.value, sizeof(expect)));
+  }
+  
+  
+  // Test array
+  {
+    const int expect[] = {0x01, 0x02, 0x03};
+    
+    const char test_parse_int_array_string[] = 
+    "  (struct TestSacsStruct) {       "
+    "    .value = {0x01, 0x02, 0x03},  "
+    "  };                              ";   
+    
+    struct struct_test_sacs_parse_int_array test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_int_array, &test_struct, test_parse_int_array_string);
+    
+    size_t expect_parse_result = strlen(test_parse_int_array_string);
+    assert(expect_parse_result == parse_result);
+    
+    assert(0 == memcmp(expect, test_struct.value, sizeof(expect)));
+  }
+}
+
+
 
 
 #include "struct_test_sacs_parse_unsigned_int.h"
@@ -1035,9 +1147,9 @@ void test_sacs_parse(void)
   test_sacs_parse_chars();
   test_sacs_parse_double();
   test_sacs_parse_int();
+  test_sacs_parse_int_array();
   test_sacs_parse_unsigned_int();
   test_sacs_parse_unsigned_long();
-  
 }
 
 

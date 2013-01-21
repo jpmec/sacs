@@ -271,13 +271,20 @@ size_t sacs_snprintf_char(struct SacsStructSnprintfer* printer, char* str, size_
   
   const char* char_value = (const char*) value;
   
-  if (isgraph(*char_value))
+  char c = * char_value;
+  
+  if ('\0' == c)
   {
-    return snprintf(str, str_size, "'%c'", *char_value);
+    return snprintf(str, str_size, "\'\\0\'");    
+  }
+  else if (isgraph(c))
+  {
+    return snprintf(str, str_size, "'%c'", c);
   }
   else
   {
-    return snprintf(str, str_size, "'\\%02X'", *char_value);    
+    unsigned char u = c;
+    return snprintf(str, str_size, "'\\%03o'", u);    
   }
 }
 
