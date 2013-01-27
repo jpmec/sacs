@@ -177,7 +177,7 @@ SACS_PARSE_FIELD(_type_name_, _field_name_, sacs_parse_float_array, _size_ * siz
 
 
 #define SACS_PARSE_TYPE(_type_name_, _dest_, _str_) \
-  _type_name_##_sacs_parse_type(_dest_, sizeof(struct _type_name_), _str_);
+  _type_name_##_sacs_parse_type(_dest_, sizeof(struct _type_name_), _str_)
 
 
 #define SACS_PARSE_ARRAY(_type_name_, _dest_, _dest_count_, _str_) 

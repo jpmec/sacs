@@ -114,6 +114,10 @@ static size_t sacs_skip_field(struct SacsStructParser* parser, const char* str)
       }
       else if (parser->format.char_struct_end == c) 
       {
+        if (char_ptr > str)
+        {
+          --char_ptr; // back up
+        }
         break;
       }
     }
@@ -160,6 +164,11 @@ size_t sacs_parse_array(struct SacsStructParser* parser, void* dest, size_t dest
   assert(dest_size);
   assert(element_size);
   assert(str);
+  
+  if ('\0' == *str)
+  {
+    return 0;
+  }  
   
   const char* char_ptr = str;
   
@@ -215,6 +224,11 @@ static size_t sacs_parse_type_name(struct SacsStructParser* parser, const char* 
 {
   assert(parser);
   assert(str);
+  
+  if ('\0' == *str)
+  {
+    return 0;
+  }
   
   const char* char_ptr = str;
   
@@ -281,6 +295,11 @@ size_t sacs_parse_bool(struct SacsStructParser* parser, void* dest, size_t dest_
   assert(dest_size);
   assert(str);
   
+  if ('\0' == *str)
+  {
+    return 0;
+  }
+  
   const char* char_ptr = str;
   
   bool b = false;
@@ -293,7 +312,7 @@ size_t sacs_parse_bool(struct SacsStructParser* parser, void* dest, size_t dest_
   else if (*char_ptr == '0')
   {
     const size_t len = sacs_skip_field(parser, str);
-    if (len > 2)
+    if (len > 2)  // TODO THIS PROBABLY ISN'T RIGHT, SHOULD PARSE UNSIGNED LONG
     {
       b = true;
     }
@@ -333,6 +352,11 @@ size_t sacs_parse_char(struct SacsStructParser* parser, void* dest, size_t dest_
   assert(dest);
   assert(dest_size);
   assert(str);
+  
+  if ('\0' == *str)
+  {
+    return 0;
+  }  
   
   const char* char_ptr = str;
   
@@ -483,6 +507,11 @@ size_t sacs_parse_char_string(struct SacsStructParser* parser, void* dest, size_
   assert(dest_size);
   assert(str);
   
+  if ('\0' == *str)
+  {
+    return 0;
+  }  
+  
   const char* char_ptr = str;
   char* dest_ptr = (char*) dest;
   
@@ -541,6 +570,11 @@ size_t sacs_parse_double(struct SacsStructParser* parser, void* dest, size_t des
   assert(dest);
   assert(dest_size);
   assert(str);
+  
+  if ('\0' == *str)
+  {
+    return 0;
+  }  
   
   const char* char_ptr = str;
   
@@ -609,6 +643,11 @@ size_t sacs_parse_enum(struct SacsStructParser* parser, void* dest, size_t dest_
   assert(dest_size);
   assert(str);
   
+  if ('\0' == *str)
+  {
+    return 0;
+  }  
+  
   const char* char_ptr = str;
   
   if (isalpha(*char_ptr))
@@ -665,6 +704,11 @@ size_t sacs_parse_int(struct SacsStructParser* parser, void* dest, size_t dest_s
   assert(dest);
   assert(dest_size);
   assert(str);
+  
+  if ('\0' == *str)
+  {
+    return 0;
+  }  
   
   const char* char_ptr = str;
   
@@ -771,6 +815,11 @@ size_t sacs_parse_long(struct SacsStructParser* parser, void* dest, size_t dest_
   assert(dest_size);
   assert(str);
   
+  if ('\0' == *str)
+  {
+    return 0;
+  }  
+  
   const char* char_ptr = str;
   
   size_t count = sacs_skip_isspace(char_ptr);
@@ -861,6 +910,11 @@ size_t sacs_parse_unsigned_long(struct SacsStructParser* parser, void* dest, siz
   assert(dest);
   assert(dest_size);
   assert(str);
+  
+  if ('\0' == *str)
+  {
+    return 0;
+  }  
   
   const char* char_ptr = str;
   
@@ -1229,6 +1283,11 @@ static size_t sacs_parse_field(struct SacsStructParser* parser, const char* str)
   assert(parser);
   assert(str);
   
+  if ('\0' == *str)
+  {
+    return 0;
+  }
+  
   if (parser->format.char_struct_end == *str)
   {
     return 0;
@@ -1342,6 +1401,12 @@ size_t sacs_parse(struct SacsStructParser* parser, const char* str)
   // initialize the structure memory
   memset(parser->dest, 0, parser->dest_size);  
   
+  // check for null string
+  if ('\0' == *str)
+  {
+    return 0;
+  }  
+  
   // may have type name
   size_t count = sacs_parse_type_name(parser, char_ptr);
   
@@ -1383,7 +1448,6 @@ size_t sacs_parse(struct SacsStructParser* parser, const char* str)
     parser->error = SACS_PARSER_ERROR_BAD_FORMAT;    
     return 0;
   }  
-  
   
   // may have ;
   count = sacs_skip_char(char_ptr, ';');

@@ -23,6 +23,10 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 #define SACS_UTIL_H
 
 
+#include "sacs_parse.h"
+#include "sacs_snprintf.h"
+
+
 
 
 /** Pretty-print a C structure string.
@@ -40,6 +44,14 @@ size_t sacs_sncompact(char* dest, size_t dest_size, const char* src, size_t src_
  *  Returns number of characters written to dest.
  */
 size_t sacs_snbintohex(char* dest, size_t dest_size, void* src, size_t src_size);
+
+
+
+/** Parse a string into a structure, then print it back to a string.
+ *  Can be used to convert a string into its "normal" form.
+ */
+#define SACS_PARSESNPRINTF_TYPE(_type_name_, _dest_struct_, _dest_string_, _dest_string_size_, _format_, _src_string_) \
+  (SACS_PARSE_TYPE(_type_name_, _dest_struct_, _src_string_)) ? SACS_SNPRINTF_TYPE(_type_name_, _dest_struct_, _dest_string_, _dest_string_size_, _format_) : 0
 
 
 

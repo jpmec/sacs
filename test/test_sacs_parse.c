@@ -1,7 +1,6 @@
 
 
 #include <assert.h>
-#include <stdio.h>
 #include <string.h>
 
 
@@ -962,6 +961,116 @@ static void test_sacs_parse_int_array(void)
 
 
 
+#include "struct_test_sacs_parse_uint8.h"
+
+
+static void test_sacs_parse_uint8(void)
+{
+  printf("%s\n", __FUNCTION__);
+  
+  // Test 'a'
+  {
+    const uint8_t expect = 'a';
+    
+    const char test_parse_uint8_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .value = 'a',       "
+    "  };                         "; 
+    
+    struct struct_test_sacs_parse_uint8 test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_uint8, &test_struct, test_parse_uint8_string);
+    assert(parse_result == strlen(test_parse_uint8_string));
+    
+    assert(expect == test_struct.value);  
+  }  
+  
+  
+  // Test '\0'
+  {
+    const uint8_t expect = '\0';
+    
+    const char test_parse_uint8_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .value = '\\0',     "
+    "  };                         "; 
+    
+    struct struct_test_sacs_parse_uint8 test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_uint8, &test_struct, test_parse_uint8_string);
+    assert(parse_result == strlen(test_parse_uint8_string));
+    
+    assert(expect == test_struct.value);  
+  } 
+  
+  
+  // Test 0
+  {
+    const uint8_t expect = 0;
+    
+    const char test_parse_uint8_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .value = 0,         "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_uint8 test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_uint8, &test_struct, test_parse_uint8_string);
+    assert(parse_result == strlen(test_parse_uint8_string));
+    
+    assert(expect == test_struct.value);
+  }
+  
+  
+  // Test 0x31
+  {
+    const uint8_t expect = 0x31;
+    
+    const char test_parse_uint8_string[] = 
+    "  (struct TestSacsStruct) {  "
+    "    .value = 0x31,      "
+    "  };                         ";   
+    
+    struct struct_test_sacs_parse_uint8 test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_uint8, &test_struct, test_parse_uint8_string);
+    assert(parse_result == strlen(test_parse_uint8_string));
+    
+    assert(expect == test_struct.value);
+  }
+  
+  // Test '\31'
+  {
+    const uint8_t expect = '\31';  // will interpret as octal
+    
+    const char test_parse_uint8_string[] = "{.value = '\\31',}";   
+    
+    struct struct_test_sacs_parse_uint8 test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_uint8, &test_struct, test_parse_uint8_string);
+    assert(parse_result == strlen(test_parse_uint8_string));
+    
+    assert(expect == test_struct.value);
+  }
+  
+  // Test '\99'
+  {
+    const uint8_t expect = 9;  // will discard the \9 and parse the 9
+    
+    const char test_parse_uint8_string[] = "{.value = '\\99',}";   
+    
+    struct struct_test_sacs_parse_uint8 test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_uint8, &test_struct, test_parse_uint8_string);
+    assert(parse_result == strlen(test_parse_uint8_string));
+    
+    assert(expect == test_struct.value);
+  }
+}
+
+
+
+
 #include "struct_test_sacs_parse_unsigned_int.h"
 
 
@@ -1135,6 +1244,7 @@ static void test_sacs_parse_unsigned_int(void)
 
 
 
+
 #include "struct_test_sacs_parse_unsigned_long.h"
 
 
@@ -1291,10 +1401,7 @@ static void test_sacs_parse_unsigned_long(void)
   {
     unsigned long expect = 5;  // Note, C does not support 0b prefix
     
-    const char test_parse_unsigned_long_string[] = 
-    "  (struct TestSacsStruct) {  "
-    "    .value = 0b101,        "
-    "  };                         ";   
+    const char test_parse_unsigned_long_string[] = "{.value = 0b101,}";
     
     struct struct_test_sacs_parse_unsigned_long test_struct = {0};
     
@@ -1309,9 +1416,6 @@ static void test_sacs_parse_unsigned_long(void)
 
 
 
-
-
-
 void test_sacs_parse(void)
 {
   test_sacs_parse_bool();
@@ -1321,8 +1425,7 @@ void test_sacs_parse(void)
   test_sacs_parse_int();
   test_sacs_parse_int_array();
   test_sacs_parse_float();
+  test_sacs_parse_uint8();
   test_sacs_parse_unsigned_int();
   test_sacs_parse_unsigned_long();
 }
-
-
