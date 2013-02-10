@@ -1490,7 +1490,7 @@ static size_t sacs_parse_field_name(const char* field_name, const char* str)
 
 
 
-static size_t sacs_parse_unnamed_field(struct SacsStructParser* parser, struct SacsFieldParser* field_parser, const char* str)
+static size_t sacs_parse_unnamed_field(struct SacsStructParser* parser, const struct SacsFieldParser* field_parser, const char* str)
 {
   assert(parser);
   assert(str);
@@ -1638,8 +1638,6 @@ size_t sacs_parse_partial(struct SacsStructParser* parser, const char* str)
   assert(str);
   
   const char* char_ptr = str;
-  
-  // TODO SUPPORT BOTH NAMED AND UN-NAMED FIELD LISTS
 
   if (sacs_is_named_partial(parser, str))
   {
@@ -1657,7 +1655,21 @@ size_t sacs_parse_partial(struct SacsStructParser* parser, const char* str)
   }
   else
   {
-    // TODO ITERATE OVER FIELDS PARSING EACH
+    for (size_t i = 0; i < parser->parsers_count; ++i)
+    {
+      const struct SacsFieldParser* field_parser = &parser->parsers_array[i];
+      
+      size_t count = sacs_parse_unnamed_field(parser, field_parser, char_ptr);
+      
+      if (count)
+      {
+        char_ptr += count;
+      }
+      else
+      {
+        break;
+      }
+    }
   }
   
   return char_ptr - str;
