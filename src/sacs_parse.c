@@ -54,6 +54,31 @@ static size_t sacs_skip_isspace(const char* str)
 
 
 
+static size_t sacs_skip_to_char(const char* str, char c)
+{
+  assert(str);
+  
+  const char* char_ptr = str;
+  
+  size_t count = sacs_skip_isspace(char_ptr);
+  
+  if (count)
+  {
+    char_ptr += count;
+  }
+  
+  
+  if (c == *char_ptr)
+  {
+    ++char_ptr;
+  }
+  
+  return char_ptr - str;  
+}
+
+
+
+
 static size_t sacs_skip_char(const char* str, char c)
 {
   assert(str);
@@ -172,8 +197,6 @@ size_t sacs_parse_array(struct SacsStructParser* parser, void* dest, size_t dest
   
   const char* char_ptr = str;
   
-  size_t array_count = dest_size / element_size;
-  
   size_t count = sacs_parse_array_begin(parser, char_ptr);
   
   if (0 < count)
@@ -184,24 +207,28 @@ size_t sacs_parse_array(struct SacsStructParser* parser, void* dest, size_t dest
   {
     return 0;
   }
-  
-  do
-  {
-    count = parse_function(parser, dest, element_size, char_ptr);
-    
-    if (count)
+
+  { // parse each element of the array
+    size_t array_count = dest_size / element_size;
+
+    do
     {
-      char_ptr += count;
-      dest += element_size;
-      
-      count = sacs_skip_char(char_ptr, parser->format.char_field_separator);
-      
+      count = parse_function(parser, dest, element_size, char_ptr);
+    
       if (count)
       {
         char_ptr += count;
+        dest += element_size;
+      
+        count = sacs_skip_char(char_ptr, parser->format.char_field_separator);
+      
+        if (count)
+        {
+          char_ptr += count;
+        }
       }
-    }
-  } while (--array_count);
+    } while (--array_count);
+  }
   
   count = sacs_parse_array_end(parser, char_ptr);
   
@@ -327,6 +354,17 @@ size_t sacs_parse_bool(struct SacsStructParser* parser, void* dest, size_t dest_
   {
     char_ptr += 5;
   }
+  else if (SACS_CHAR_SINGLE_QUOTE == *char_ptr)
+  {
+    char c = 0;
+    const size_t parse_char_size = sacs_parse_char(parser, &c, sizeof(c), char_ptr);
+    
+    if (parse_char_size)
+    {
+      b = c;
+      char_ptr += parse_char_size;
+    }
+  }
   else
   {
     const size_t len = sacs_skip_field(parser, str);
@@ -347,6 +385,220 @@ size_t sacs_parse_bool(struct SacsStructParser* parser, void* dest, size_t dest_
 
 
 
+static size_t sacs_parse_char_escaped_octal(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str)
+{
+  assert(parser);
+  assert(dest);
+  assert(dest_size);
+  assert(str);
+  
+  if ('\0' == *str)
+  {
+    return 0;
+  }   
+
+  const char* char_ptr = str;  
+  char* dest_ptr = (char*) dest;  
+  
+  char buffer[3] = {0}; // read at most three characters
+  
+  for (size_t i = 0; i < 3; ++i)
+  {
+    const char c = *char_ptr;
+    
+    if (!isdigit(c) || ('8' < c))
+    {
+      break;
+    }
+    
+    buffer[i] = c;
+    ++char_ptr;
+  }
+  
+  char* end_ptr = 0;
+  unsigned long value = strtoul(buffer, &end_ptr, 8);
+
+  if (end_ptr)
+  {
+    *dest_ptr = 0xFF & value;
+  }
+  
+  return char_ptr - str;
+}
+
+
+
+
+static size_t sacs_parse_char_escaped_value(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str)
+{
+  assert(dest);
+  assert(dest_size);
+  assert(str); 
+  
+  if ('\0' == *str)
+  {
+    return 0;
+  }  
+  
+  const char* char_ptr = str;  
+  char* dest_ptr = (char*) dest;
+  
+  char c = *char_ptr;
+  
+  if (isdigit(c))
+  {
+    // interpret as octal format
+    size_t count = sacs_parse_char_escaped_octal(parser, dest, dest_size, str);
+    char_ptr += count;
+  }
+  else if (isgraph(c))
+  {
+    switch (c)
+    {
+      case SACS_CHAR_BACKSLASH:
+      {
+        c = SACS_CHAR_BACKSLASH;
+        *dest_ptr = c;
+        ++char_ptr;
+      } break;
+      
+      case SACS_CHAR_DOUBLE_QUOTE:
+      {
+        c = SACS_CHAR_DOUBLE_QUOTE;
+        *dest_ptr = c;
+        ++char_ptr;
+      } break;   
+      
+      case SACS_CHAR_SINGLE_QUOTE:
+      {
+        c = SACS_CHAR_SINGLE_QUOTE;
+        *dest_ptr = c;
+        ++char_ptr;
+      } break;
+      
+      case SACS_CHAR_QUESTION:
+      {
+        c = SACS_CHAR_QUESTION;
+        *dest_ptr = c;
+        ++char_ptr;
+      } break;
+      
+      case 'a':
+      {
+        c = SACS_CHAR_BELL_ALERT;
+        *dest_ptr = c;
+        ++char_ptr;
+      } break;
+      
+      case 'b':
+      {
+        c = SACS_CHAR_BACKSPACE;
+        *dest_ptr = c;
+        ++char_ptr;
+      } break;
+      
+      case 'f': 
+      {
+        c = SACS_CHAR_FORMFEED;
+        *dest_ptr = c;
+        ++char_ptr;
+      } break;
+      
+      case 'n':
+      {
+        c = SACS_CHAR_NEWLINE;
+        *dest_ptr = c;
+        ++char_ptr;
+      } break;
+      
+      case 'r':
+      {
+        c = SACS_CHAR_RETURN;
+        *dest_ptr = c;
+        ++char_ptr;
+      } break;
+      
+      case 't':
+      {
+        c = SACS_CHAR_TAB;
+        *dest_ptr = c;
+        ++char_ptr;
+      } break;
+      
+      case 'v':
+      {
+        c = SACS_CHAR_VTAB;
+        *dest_ptr = c;
+        ++char_ptr;
+      } break;
+      
+      default:
+      {
+        // didn't match
+      }
+    }
+  }
+  
+  return char_ptr - str;
+}
+
+
+
+
+static size_t sacs_parse_char_value(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str)
+{
+  assert(dest);
+  assert(dest_size);
+  assert(str);
+  
+  if ('\0' == *str)
+  {
+    return 0;
+  }
+  
+  const char* char_ptr = str;
+  
+  char c = *char_ptr;
+  
+  // handle escape characters
+  if (SACS_CHAR_BACKSLASH == c)
+  {
+    ++char_ptr;
+    
+    size_t count = sacs_parse_char_escaped_value(parser, dest, dest_size, char_ptr);
+    
+    char_ptr += count;
+    
+    if (0 == count)
+    {
+      unsigned long long_value = 0;
+      --char_ptr;
+      count = sacs_parse_unsigned_long(parser, &long_value, sizeof(unsigned long), char_ptr);
+        
+      if (count)
+      {
+        c = 0xFF & long_value;
+        char_ptr += count;
+      }
+      else
+      {
+        return 0; // bad format
+      }
+    }
+  }
+  else
+  {
+    char* dest_ptr = (char*) dest;
+    *dest_ptr = c;
+    ++char_ptr;
+  }
+  
+  return char_ptr - str;
+}
+
+
+
+
 size_t sacs_parse_char(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str)
 {
   assert(dest);
@@ -360,111 +612,41 @@ size_t sacs_parse_char(struct SacsStructParser* parser, void* dest, size_t dest_
   
   const char* char_ptr = str;
   
-  size_t count = sacs_skip_char(char_ptr, SACS_CHAR_SINGLE_QUOTE);
+  
+  // look for single quote
+  size_t count = sacs_skip_to_char(char_ptr, SACS_CHAR_CHAR_BEGIN);
   
   if (count)
   {
     char_ptr += count;
-    
-    char c = *char_ptr;
-    
-    // handle escape characters
-    if (SACS_CHAR_BACKSLASH == c)
+   
+    if (SACS_CHAR_CHAR_BEGIN == *char_ptr)
     {
-      ++char_ptr;
-      
-      c = *char_ptr;
-      
-      switch (c)
-      {
-        case SACS_CHAR_BACKSLASH:
-        {
-          c = SACS_CHAR_BACKSLASH;
-        } break;
-          
-        case SACS_CHAR_DOUBLE_QUOTE:
-        {
-          c = SACS_CHAR_DOUBLE_QUOTE;
-        } break;   
-          
-        case SACS_CHAR_SINGLE_QUOTE:
-        {
-          c = SACS_CHAR_SINGLE_QUOTE;
-        } break;
-          
-        case SACS_CHAR_QUESTION:
-        {
-          c = SACS_CHAR_QUESTION;
-        } break;
-          
-        case 'a':
-        {
-          c = SACS_CHAR_BELL_ALERT;
-        } break;
-        
-        case 'b':
-        {
-          c = SACS_CHAR_BACKSPACE;
-        } break;
-
-        case 'f': 
-        {
-          c = SACS_CHAR_FORMFEED;
-        } break;
-          
-        case 'n':
-        {
-          c = SACS_CHAR_NEWLINE;
-        } break;
-          
-        case 'r':
-        {
-          c = SACS_CHAR_RETURN;
-        } break;
-          
-        case 't':
-        {
-          c = SACS_CHAR_TAB;
-        } break;
-          
-        case 'v':
-        {
-          c = SACS_CHAR_VTAB;
-        } break;
-          
-        default:
-        {
-          unsigned long long_value = 0;
-          --char_ptr;
-          count = sacs_parse_unsigned_long(parser, &long_value, sizeof(unsigned long), char_ptr);
-          
-          if (count)
-          {
-            c = 0xFF & long_value;
-            char_ptr += count;
-          }
-          else
-          {
-            return 0; // bad format
-          }
-        }
-      }
+      parser->error = SACS_PARSER_ERROR_BAD_FORMAT;
+      return 0;
     }
     
-    ++char_ptr;
-    
-    count = sacs_skip_char(char_ptr, SACS_CHAR_SINGLE_QUOTE);
-    
-    if (count)
+    // must parse at least one character
+    count = sacs_parse_char_value(parser, dest, dest_size, char_ptr);
+  
+    if (0 == count)
     {
-      char_ptr += count;
+      parser->error = SACS_PARSER_ERROR_BAD_FORMAT;
+      return 0;
+    }    
+    
+    char_ptr += count;
+    
+    // must have closing single quote
+    count = sacs_skip_char(char_ptr, SACS_CHAR_CHAR_END);
+    
+    if (0 == count)
+    {
+      parser->error = SACS_PARSER_ERROR_BAD_FORMAT;
+      return 0;
     }
     
-    char* dest_ptr = (char*) dest;
-    
-    *dest_ptr = c;
-    
-    return char_ptr - str;
+    char_ptr += count;
   }
   
   else if ((0 == count) && isdigit(*str))
@@ -479,11 +661,9 @@ size_t sacs_parse_char(struct SacsStructParser* parser, void* dest, size_t dest_
       
       char_ptr += count;        
     }
-    
-    return char_ptr - str;
   }
     
-  return 0;
+  return char_ptr - str;
 }
 
 
@@ -501,8 +681,42 @@ size_t sacs_parse_char_array(struct SacsStructParser* parser, void* dest, size_t
 
 
 
+static size_t sacs_parse_char_string_format_doublequote(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str)
+{
+  assert(parser);
+  assert(dest);
+  assert(dest_size);
+  assert(str);  
+  
+  const char* char_ptr = str;
+  char* dest_ptr = (char*) dest;
+  
+  size_t count = 0;
+  do
+  {
+    if (SACS_CHAR_STRING_END == *char_ptr)
+    {
+      break;
+    }
+    
+    count = sacs_parse_char_value(parser, dest_ptr, dest_size, char_ptr);
+    
+    char_ptr += count;
+    
+    ++dest_ptr;
+    --dest_size;
+    
+  } while (count);
+  
+  return char_ptr - str;
+}
+
+
+
+
 size_t sacs_parse_char_string(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str)
 {
+  assert(parser);
   assert(dest);
   assert(dest_size);
   assert(str);
@@ -515,36 +729,29 @@ size_t sacs_parse_char_string(struct SacsStructParser* parser, void* dest, size_
   const char* char_ptr = str;
   char* dest_ptr = (char*) dest;
   
-  size_t count = sacs_skip_char(char_ptr, SACS_CHAR_DOUBLE_QUOTE);
+  // look for double quote start to string
+  size_t count = sacs_skip_char(char_ptr, SACS_CHAR_STRING_BEGIN);
   
   if (count)
   {
     char_ptr += count;
     
-    char c = 0;
-    do
-    {
-      c = *char_ptr;
-      
-      if (SACS_CHAR_DOUBLE_QUOTE == c)
-      {
-        break;
-      }
-      
-      *dest_ptr = c;
-      
-      ++dest_ptr;
-      ++char_ptr;
-      
-    } while (c);
+    count = sacs_parse_char_string_format_doublequote(parser, dest_ptr, dest_size, char_ptr);
     
+    char_ptr += count;
     
-    count = sacs_skip_char(char_ptr, SACS_CHAR_DOUBLE_QUOTE);  
+    // must have double quote to end string
+    count = sacs_skip_char(char_ptr, SACS_CHAR_STRING_END);  
     
     if (count)
     {
       char_ptr += count;
-    }    
+    }
+    else
+    {
+      parser->error = SACS_PARSER_ERROR_BAD_FORMAT;
+      return 0;
+    }
   }
   
   
@@ -1158,6 +1365,11 @@ size_t sacs_parse_float(struct SacsStructParser* parser, void* dest, size_t dest
   assert(dest);
   assert(dest_size);
   assert(str);
+  
+  if ('\0' == *str)
+  {
+    return 0;
+  }   
   
   const char* char_ptr = str;
   

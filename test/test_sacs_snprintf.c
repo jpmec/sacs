@@ -1,12 +1,16 @@
 
 
-#include <stdio.h>
-#include "test_sacs.h"
+#include "test_sacs_snprintf.h"
 
 
 
 #include "struct_test_sacs_snprintf_char.h"
 #include "struct_test_sacs_snprintf_chars.h"
+
+#include "../src/sacs_util.h"
+
+
+#include <assert.h>
 
 
 
@@ -16,16 +20,21 @@
 static void test_cycle_sacs_snprintf_char(const char* expect_string, const char* test_string)
 {
   struct struct_test_sacs_snprintf_char test_struct = {0};
-  
-  const size_t snprintf_result = SACS_PARSE_TYPE(struct_test_sacs_snprintf_char, &test_struct, test_string);
-  assert(snprintf_result == strlen(test_string));
-  
   char result_string[256] = {0};
-  struct SacsStructSnprintfFormat format = SACS_SNPRINTF_FORMAT_DEFAULT;
-  
+  struct SacsStructSnprintfFormat format = SACS_SNPRINTF_FORMAT_DEFAULT;  
+
+  const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_snprintf_char, &test_struct, test_string);
+  assert(parse_result == strlen(test_string));  
+
   const size_t result_string_size = SACS_SNPRINTF_TYPE(struct_test_sacs_snprintf_char, &test_struct, result_string, sizeof(result_string), &format);  
-  assert(result_string_size == strlen(expect_string));
+  assert(result_string_size == strlen(expect_string));  
+  assert(0 == strcmp(expect_string, result_string));  
   
+
+  memset(result_string, 0, sizeof(result_string));
+  const size_t parsesnprintf_string_size = SACS_PARSESNPRINTF_TYPE( struct_test_sacs_snprintf_char, &test_struct, result_string, sizeof(result_string), &format, test_string);
+
+  assert(parsesnprintf_string_size == strlen(expect_string));  
   assert(0 == strcmp(expect_string, result_string));  
 }
 
@@ -50,16 +59,18 @@ static void test_cycle_sacs_snprintf_chars(const char* expect_string, const char
 
 
 
+
 static void test_sacs_snprintf_char(void)
 {
   printf("%s\n", __FUNCTION__);
+  
   
   // Test 'a'
   {
     const char test_string[] = "{.value='a',}"; 
     
     test_cycle_sacs_snprintf_char(test_string, test_string);
-  }
+  }  
   
   
   // Test '\0'
