@@ -210,10 +210,7 @@ static void test_sacs_parse_char(void)
   {
     const char expect = 'a';
     
-    const char test_parse_char_string[] = 
-    "  (struct TestSacsStruct) {  "
-    "    .value = 'a',       "
-    "  };                         "; 
+    const char test_parse_char_string[] = " {  .value = 'a'} "; 
     
     struct struct_test_sacs_parse_char test_struct = {0};
     
@@ -1454,6 +1451,70 @@ static void test_sacs_parse_unsigned_long(void)
 
 
 
+#include "struct_test_sacs_parse_struct.h"
+
+
+struct expect_char 
+{
+  char value;
+};
+
+
+static void test_sacs_parse_struct(void)
+{
+  printf("%s\n", __FUNCTION__);
+  
+  
+  // Test simple structure
+  {
+    const struct struct_test_sacs_parse_char expect = {.value = 1};
+    
+    const char test_parse_struct_string[] = " { .value = {.value = 1}} ";   
+    
+    struct struct_test_sacs_parse_struct test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_struct, &test_struct, test_parse_struct_string);
+    assert(parse_result == strlen(test_parse_struct_string));
+    
+    
+    assert( 0 == memcmp(&expect, &test_struct.value, sizeof(expect)) );
+  }
+  
+  
+  // Test simple structure
+  {
+    const struct struct_test_sacs_parse_char expect = {.value = 'a'};
+    
+    const char test_parse_struct_string[] = " { .value = {.value = 'a'}} ";   
+    
+    struct struct_test_sacs_parse_struct test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_struct, &test_struct, test_parse_struct_string);
+    assert(parse_result == strlen(test_parse_struct_string));
+    
+    
+    assert( 0 == memcmp(&expect, &test_struct.value, sizeof(expect)) );
+  }
+  
+  // Test simple structure
+  {
+//    const struct struct_test_sacs_parse_char expect = {'a'};
+    
+//    const char test_parse_struct_string[] = " { .value = {'a'}} ";   
+    
+//    struct struct_test_sacs_parse_struct test_struct = {0};
+    
+//    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_struct, &test_struct, test_parse_struct_string);
+//    assert(parse_result == strlen(test_parse_struct_string));
+    
+//    assert( 0 == memcmp(&expect, &test_struct.value, sizeof(expect)) );
+  }  
+
+}
+
+
+
+
 void test_sacs_parse(void)
 {
   test_sacs_parse_bool();
@@ -1466,4 +1527,6 @@ void test_sacs_parse(void)
   test_sacs_parse_uint8();
   test_sacs_parse_unsigned_int();
   test_sacs_parse_unsigned_long();
+  
+  test_sacs_parse_struct();
 }

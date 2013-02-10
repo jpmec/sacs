@@ -1490,7 +1490,51 @@ static size_t sacs_parse_field_name(const char* field_name, const char* str)
 
 
 
-static size_t sacs_parse_field(struct SacsStructParser* parser, const char* str)
+static size_t sacs_parse_unnamed_field(struct SacsStructParser* parser, struct SacsFieldParser* field_parser, const char* str)
+{
+  assert(parser);
+  assert(str);
+  
+  if ('\0' == *str)
+  {
+    return 0;
+  }
+  
+  if (parser->format.char_struct_end == *str)
+  {
+    return 0;
+  }  
+  
+  const char* char_ptr = str;
+  
+  size_t count = 0;
+  
+  void* dest = parser->dest + field_parser->field_offset;
+  count = field_parser->function(parser, dest, field_parser->field_size, char_ptr);
+    
+  if (count)
+  {
+    char_ptr += count;
+  }
+  else
+  {
+    return 0;
+  }
+  
+  count = sacs_skip_char(char_ptr, parser->format.char_field_separator);
+  
+  if (count)
+  {
+    char_ptr += count;
+  }
+  
+  return char_ptr - str;
+}
+
+
+
+
+static size_t sacs_parse_named_field(struct SacsStructParser* parser, const char* str)
 {
   assert(parser);
   assert(str);
@@ -1573,6 +1617,21 @@ static size_t sacs_parse_field(struct SacsStructParser* parser, const char* str)
 
 
 
+static bool sacs_is_named_partial(struct SacsStructParser* parser, const char* str)
+{
+  assert(parser);
+  assert(str);
+  
+  const char* char_ptr = str; 
+  
+  const size_t count = sacs_skip_char(char_ptr, '.');
+  
+  return (0 < count);
+}
+
+
+
+
 size_t sacs_parse_partial(struct SacsStructParser* parser, const char* str)
 {
   assert(parser);
@@ -1580,17 +1639,26 @@ size_t sacs_parse_partial(struct SacsStructParser* parser, const char* str)
   
   const char* char_ptr = str;
   
-  size_t count = 0;
-  do
+  // TODO SUPPORT BOTH NAMED AND UN-NAMED FIELD LISTS
+
+  if (sacs_is_named_partial(parser, str))
   {
-    count = sacs_parse_field(parser, char_ptr);
-    
-    if (count)
+    size_t count = 0;
+    do
     {
-      char_ptr += count;
-    }
+      count = sacs_parse_named_field(parser, char_ptr);
     
-  } while (count);
+      if (count)
+      {
+        char_ptr += count;
+      }
+    
+    } while (count);
+  }
+  else
+  {
+    // TODO ITERATE OVER FIELDS PARSING EACH
+  }
   
   return char_ptr - str;
 }
