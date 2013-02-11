@@ -1,0 +1,7 @@
+struct_begin(struct_test_sacs_parse_char_int_float)
+
+  char__(char_value)
+  int__(int_value)
+  float__(float_value)
+
+struct_end(struct_test_sacs_parse_char_int_float)
