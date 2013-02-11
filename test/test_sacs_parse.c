@@ -1535,6 +1535,67 @@ static void test_sacs_parse_char_int(void)
     assert(expect_char == test_struct.char_value); 
     assert(expect_int == test_struct.int_value); 
   }  
+  
+  
+  // Test unnamed with named
+  {
+    struct struct_test_sacs_parse_char_int expect_struct = { 'a', .int_value = 1};
+    
+    const char test_parse_char_int_string[] = " { 'a', .int_value = 1 } "; 
+    
+    struct struct_test_sacs_parse_char_int test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_char_int, &test_struct, test_parse_char_int_string);
+    assert(parse_result == strlen(test_parse_char_int_string));
+    
+    assert(expect_struct.char_value == test_struct.char_value); 
+    assert(expect_struct.int_value == test_struct.int_value); 
+  } 
+  
+  
+  // Test unnamed with named
+  {
+    struct struct_test_sacs_parse_char_int expect_struct = { .char_value = 'a', 1};
+    
+    const char test_parse_char_int_string[] = " { 'a', .int_value = 1 } "; 
+    
+    struct struct_test_sacs_parse_char_int test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_char_int, &test_struct, test_parse_char_int_string);
+    assert(parse_result == strlen(test_parse_char_int_string));
+    
+    assert(expect_struct.char_value == test_struct.char_value); 
+    assert(expect_struct.int_value == test_struct.int_value); 
+  }   
+}
+
+
+
+
+
+
+#include "struct_test_sacs_parse_char_int_float.h"
+
+
+static void test_sacs_parse_char_int_float(void)
+{
+  printf("%s\n", __FUNCTION__);
+  
+  // Test named { 'a', 1 }
+  {
+    const char expect_char = 'a';
+    const char expect_int = 1;
+    
+    const char test_parse_char_int_float_string[] = " { .char_value = 'a', .int_value = 1, .float_value = 2.0 } "; 
+    
+    struct struct_test_sacs_parse_char_int test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_char_int_float, &test_struct, test_parse_char_int_float_string);
+    assert(parse_result == strlen(test_parse_char_int_float_string));
+    
+    assert(expect_char == test_struct.char_value); 
+    assert(expect_int == test_struct.int_value); 
+  } 
 }
 
 
@@ -1649,6 +1710,7 @@ void test_sacs_parse(void)
   test_sacs_parse_unsigned_long();
   
   test_sacs_parse_char_int();
+  test_sacs_parse_char_int_float();
   
   test_sacs_parse_struct();
 }

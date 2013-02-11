@@ -37,6 +37,7 @@
 
 
 
+
 static size_t sacs_skip_isspace(const char* str)
 {
   assert(str);
@@ -1490,10 +1491,16 @@ static size_t sacs_parse_field_name(const char* field_name, const char* str)
 
 
 
-static size_t sacs_parse_unnamed_field(struct SacsStructParser* parser, const struct SacsFieldParser* field_parser, const char* str)
+static size_t sacs_parse_unnamed_field(struct SacsStructParser* parser, const struct SacsFieldParser** field_parser, const char* str)
 {
   assert(parser);
+  assert(field_parser);
   assert(str);
+  
+  if (NULL == *field_parser)
+  {
+    return 0;
+  }
   
   if ('\0' == *str)
   {
@@ -1509,8 +1516,8 @@ static size_t sacs_parse_unnamed_field(struct SacsStructParser* parser, const st
   
   size_t count = 0;
   
-  void* dest = parser->dest + field_parser->field_offset;
-  count = field_parser->function(parser, dest, field_parser->field_size, char_ptr);
+  void* dest = parser->dest + (*field_parser)->field_offset;
+  count = (*field_parser)->function(parser, dest, (*field_parser)->field_size, char_ptr);
     
   if (count)
   {
@@ -1534,9 +1541,10 @@ static size_t sacs_parse_unnamed_field(struct SacsStructParser* parser, const st
 
 
 
-static size_t sacs_parse_named_field(struct SacsStructParser* parser, const char* str)
+static size_t sacs_parse_named_field(struct SacsStructParser* parser, const struct SacsFieldParser** field_parser, const char* str)
 {
   assert(parser);
+  assert(field_parser);
   assert(str);
   
   if ('\0' == *str)
@@ -1552,9 +1560,7 @@ static size_t sacs_parse_named_field(struct SacsStructParser* parser, const char
   const char* char_ptr = str;
 
   size_t count = 0;
-  
-  const struct SacsFieldParser* field_parser = NULL;
-  
+
   for (size_t i = 0; i < parser->parsers_count; ++i)
   {
     const struct SacsFieldParser* temp_field_parser = &parser->parsers_array[i];
@@ -1563,52 +1569,57 @@ static size_t sacs_parse_named_field(struct SacsStructParser* parser, const char
     
     if (count)
     {
-      field_parser = temp_field_parser;
+      *field_parser = temp_field_parser;
       char_ptr += count;
       break;
     }
+    else
+    {
+      *field_parser = NULL;
+    }
   }
   
-  if (NULL == field_parser)
+  if (NULL == (*field_parser))
   {
     count = sacs_skip_field(parser, char_ptr);
     
     if (count)
     {
       char_ptr += count;
-    }    
+    }
+    
+    count = sacs_skip_char(char_ptr, parser->format.char_field_separator);
+    
+    if (count)
+    {
+      char_ptr += count;
+    }
   }
   else
   {
+    // parse named field
     count = sacs_skip_char(char_ptr, parser->format.char_field_value_separator);
     
     if (count)
     {
       char_ptr += count;
+      
+      count = sacs_parse_unnamed_field(parser, field_parser, char_ptr);    
+      
+      if (count)
+      {
+        char_ptr += count;
+      }
+      else
+      {
+        parser->error = SACS_PARSER_ERROR_BAD_FORMAT;  
+        return 0;
+      }
     }
     else
     {
       return 0;
     }
-    
-    void* dest = parser->dest + field_parser->field_offset;
-    count = field_parser->function(parser, dest, field_parser->field_size, char_ptr);
-    
-    if (count)
-    {
-      char_ptr += count;
-    }
-    else
-    {
-      return 0;
-    }
-  }
-  
-  count = sacs_skip_char(char_ptr, parser->format.char_field_separator);
-  
-  if (count)
-  {
-    char_ptr += count;
   }
   
   return char_ptr - str;
@@ -1639,38 +1650,41 @@ size_t sacs_parse_partial(struct SacsStructParser* parser, const char* str)
   
   const char* char_ptr = str;
 
-  if (sacs_is_named_partial(parser, str))
-  {
-    size_t count = 0;
-    do
+  const struct SacsFieldParser* field_parser_end = &parser->parsers_array[parser->parsers_count];
+  const struct SacsFieldParser* field_parser = &parser->parsers_array[0];  
+  
+  size_t count = 0;
+  
+  do
+  {    
+    if (sacs_is_named_partial(parser, char_ptr))
     {
-      count = sacs_parse_named_field(parser, char_ptr);
+      count = sacs_parse_named_field(parser, &field_parser, char_ptr);
     
       if (count)
       {
         char_ptr += count;
+        ++field_parser;
       }
-    
-    } while (count);
-  }
-  else
-  {
-    for (size_t i = 0; i < parser->parsers_count; ++i)
+    }
+    else
     {
-      const struct SacsFieldParser* field_parser = &parser->parsers_array[i];
-      
-      size_t count = sacs_parse_unnamed_field(parser, field_parser, char_ptr);
-      
-      if (count)
+      if (field_parser_end == field_parser)
       {
-        char_ptr += count;
+        count = 0;
       }
       else
       {
-        break;
+        count = sacs_parse_unnamed_field(parser, &field_parser, char_ptr);
+      
+        if (count)
+        {
+          char_ptr += count;
+          ++field_parser;
+        }
       }
     }
-  }
+  } while (count);
   
   return char_ptr - str;
 }
