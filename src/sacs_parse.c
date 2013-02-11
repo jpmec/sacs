@@ -27,6 +27,7 @@
 
 #include <assert.h>
 #include <ctype.h>
+#include <limits.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -650,10 +651,10 @@ size_t sacs_parse_char(struct SacsStructParser* parser, void* dest, size_t dest_
     char_ptr += count;
   }
   
-  else if ((0 == count) && isdigit(*str))
+  else if ((0 == count) && isdigit(*char_ptr))
   {
     int i = 0;
-    count = sacs_parse_int(parser, &i, sizeof(i), str);
+    count = sacs_parse_int(parser, &i, sizeof(i), char_ptr);
     
     if (count)
     {
@@ -663,6 +664,42 @@ size_t sacs_parse_char(struct SacsStructParser* parser, void* dest, size_t dest_
       char_ptr += count;        
     }
   }
+  
+  else if ((0 == count) && (0 == strncmp("SCHAR_MIN", char_ptr, 9)))
+  {
+    char* char_value_ptr = dest;
+    *char_value_ptr = SCHAR_MIN;
+    
+    count = 9;
+    char_ptr += 9;       
+  }
+  
+  else if ((0 == count) && (0 == strncmp("SCHAR_MAX", char_ptr, 9)))
+  {
+    char* char_value_ptr = dest;
+    *char_value_ptr = SCHAR_MAX;
+    
+    count = 9;
+    char_ptr += 9;       
+  }
+  
+  else if ((0 == count) && (0 == strncmp("CHAR_MIN", char_ptr, 8)))
+  {
+    char* char_value_ptr = dest;
+    *char_value_ptr = CHAR_MIN;
+    
+    count = 8;
+    char_ptr += 8;       
+  }
+  
+  else if ((0 == count) && (0 == strncmp("CHAR_MAX", char_ptr, 8)))
+  {
+    char* char_value_ptr = dest;
+    *char_value_ptr = CHAR_MAX;
+    
+    count = 8;
+    char_ptr += 8;       
+  }   
     
   return char_ptr - str;
 }
@@ -990,6 +1027,24 @@ size_t sacs_parse_int(struct SacsStructParser* parser, void* dest, size_t dest_s
       
       char_ptr += count;        
     }
+  }
+
+  if ((0 == count) && (0 == strncmp("INT_MIN", char_ptr, 7)))
+  {
+    int* int_value_ptr = dest;
+    *int_value_ptr = INT_MIN;
+    
+    count = 7;
+    char_ptr += 7;       
+  }
+  
+  if ((0 == count) && (0 == strncmp("INT_MAX", char_ptr, 7)))
+  {
+    int* int_value_ptr = dest;
+    *int_value_ptr = INT_MAX;
+    
+    count = 7;
+    char_ptr += 7;       
   }
   
   count = sacs_skip_isspace(char_ptr);

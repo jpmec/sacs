@@ -8,6 +8,8 @@
 
 #include "../src/sacs.h"
 
+#include <limits.h>
+
 
 
 
@@ -38,7 +40,7 @@ static void test_sacs_parse_bool(void)
   {
     const bool expect = true;
     
-    const char test_parse_bool_string[] = "{.value = true}";   
+    const char test_parse_bool_string[] = "{  .value = true } ";   
     
     struct struct_test_sacs_parse_bool test_struct = {0};
     
@@ -83,7 +85,7 @@ static void test_sacs_parse_bool(void)
   {
     const bool expect = 1;
     
-    const char test_parse_bool_string[] = " {  .value = 1 } ";
+    const char test_parse_bool_string[] = " { .value = 1 } ";
   
     struct struct_test_sacs_parse_bool test_struct = {0};
     
@@ -98,7 +100,7 @@ static void test_sacs_parse_bool(void)
   {
     const bool expect = 2;
     
-    const char test_parse_bool_string[] = " {  .value = 2 } ";
+    const char test_parse_bool_string[] = " { .value = 2 } ";
   
     struct struct_test_sacs_parse_bool test_struct = {0};
     
@@ -113,7 +115,7 @@ static void test_sacs_parse_bool(void)
   {
     const bool expect = 01;
     
-    const char test_parse_bool_string[] = "  {  .value = 01 }";
+    const char test_parse_bool_string[] = "  { .value = 01 }";
 
     struct struct_test_sacs_parse_bool test_struct = {0};    
     
@@ -280,6 +282,7 @@ static void test_sacs_parse_char(void)
     assert(expect == test_struct.value);
   }
   
+  
   // Test '\31'
   {
     const char expect = '\31';  // will interpret as octal
@@ -293,6 +296,79 @@ static void test_sacs_parse_char(void)
     
     assert(expect == test_struct.value);
   }
+  
+  
+  // Test SCHAR_MIN
+  {
+    const char expect = SCHAR_MIN;
+    
+    const char test_parse_char_string[] = " { .value = SCHAR_MIN } ";   
+    
+    struct struct_test_sacs_parse_char test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_char, &test_struct, test_parse_char_string);
+    assert(parse_result == strlen(test_parse_char_string));
+    
+    assert(expect == test_struct.value);
+  }
+  
+  
+  // Test SCHAR_MAX
+  {
+    const char expect = SCHAR_MAX;
+    
+    const char test_parse_char_string[] = " { .value = SCHAR_MAX } ";   
+    
+    struct struct_test_sacs_parse_char test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_char, &test_struct, test_parse_char_string);
+    assert(parse_result == strlen(test_parse_char_string));
+    
+    assert(expect == test_struct.value);
+  } 
+  
+  
+  // Test SCHAR_MAX
+  {
+//    const char expect = SCHAR_MAX_NOT_A_REAL_NAME;  // compiler error, not a valid symbol
+    
+    const char test_parse_char_string[] = " { .value = SCHAR_MAX_NOT_A_REAL_NAME } ";   
+    
+    struct struct_test_sacs_parse_char test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_char, &test_struct, test_parse_char_string);
+    assert(0 == parse_result);
+  }   
+
+  
+  // Test CHAR_MIN
+  {
+    const char expect = CHAR_MIN;
+    
+    const char test_parse_char_string[] = " { .value = CHAR_MIN } ";   
+    
+    struct struct_test_sacs_parse_char test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_char, &test_struct, test_parse_char_string);
+    assert(parse_result == strlen(test_parse_char_string));
+    
+    assert(expect == test_struct.value);
+  }
+  
+  
+  // Test CHAR_MAX
+  {
+    const char expect = CHAR_MAX;
+    
+    const char test_parse_char_string[] = " { .value = CHAR_MAX } ";   
+    
+    struct struct_test_sacs_parse_char test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_char, &test_struct, test_parse_char_string);
+    assert(parse_result == strlen(test_parse_char_string));
+    
+    assert(expect == test_struct.value);
+  }   
 
   
   // test single singlequote
@@ -829,9 +905,7 @@ static void test_sacs_parse_int(void)
   {
     int expect = 0;
     
-    const char test_parse_int_string[] = 
-    "  {  .value = 0,          "
-    "  };                         ";   
+    const char test_parse_int_string[] = " { .value = 0 } ";  
 
     struct struct_test_sacs_parse_int test_struct = {0};
 
@@ -846,9 +920,7 @@ static void test_sacs_parse_int(void)
   {
     int expect = 1;
     
-    const char test_parse_int_string[] = 
-    "  {  .value = 1,          "
-    "  };                         ";   
+    const char test_parse_int_string[] = " { .value = 1 } "; 
     
     struct struct_test_sacs_parse_int test_struct = {0};
     
@@ -863,9 +935,7 @@ static void test_sacs_parse_int(void)
   {
     int expect = 01;
     
-    const char test_parse_int_string[] = 
-    "  {  .value = 01,         "
-    "  };                         ";   
+    const char test_parse_int_string[] = " { .value = 01 } ";   
     
     struct struct_test_sacs_parse_int test_struct = {0};
     
@@ -880,9 +950,7 @@ static void test_sacs_parse_int(void)
   {
     int expect = 'a';
     
-    const char test_parse_int_string[] = 
-    "  {  .value = 'a',        "
-    "  };                         ";   
+    const char test_parse_int_string[] = " { .value = 'a' } ";  
     
     struct struct_test_sacs_parse_int test_struct = {0};
     
@@ -897,9 +965,7 @@ static void test_sacs_parse_int(void)
   {
     int expect = 0x1;
     
-    const char test_parse_int_string[] = 
-    "  {  .value = 0x1,        "
-    "  };                         ";   
+    const char test_parse_int_string[] = " { .value = 0x1 } ";   
     
     struct struct_test_sacs_parse_int test_struct = {0};
     
@@ -914,9 +980,7 @@ static void test_sacs_parse_int(void)
   {
     int expect = 0xABCDEF;
     
-    const char test_parse_int_string[] = 
-    "  {  .value = 0xABCDEF,   "
-    "  };                         ";   
+    const char test_parse_int_string[] = " { .value = 0xABCDEF } ";   
     
     struct struct_test_sacs_parse_int test_struct = {0};
     
@@ -925,7 +989,36 @@ static void test_sacs_parse_int(void)
     
     assert(expect == test_struct.value);
   }
+ 
   
+  // Test INT_MIN
+  {
+    int expect = INT_MIN;
+    
+    const char test_parse_int_string[] = " { .value = INT_MIN } ";   
+    
+    struct struct_test_sacs_parse_int test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_int, &test_struct, test_parse_int_string);
+    assert(parse_result == strlen(test_parse_int_string));
+    
+    assert(expect == test_struct.value);
+  }
+
+  
+  // Test INT_MAX
+  {
+    int expect = INT_MAX;
+    
+    const char test_parse_int_string[] = " { .value = INT_MAX } ";   
+    
+    struct struct_test_sacs_parse_int test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_int, &test_struct, test_parse_int_string);
+    assert(parse_result == strlen(test_parse_int_string));
+    
+    assert(expect == test_struct.value);
+  }  
 }
 
 
