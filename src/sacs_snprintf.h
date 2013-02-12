@@ -24,6 +24,7 @@
 
 
 
+
 #define SACS_SNPRINTF_FIELD_TYPE(_type_name_, _field_name_, _macro_type_) \
   SACS_SNPRINTF_FIELD(_type_name_, _field_name_, sacs_snprintf_##_macro_type_, sizeof(_macro_type_))
 
@@ -71,7 +72,7 @@ SACS_SNPRINTF_FIELD(_type_name_, _field_name_, sacs_snprintf_enum, sizeof(enum _
 
 
 #define SACS_SNPRINTF_UNSIGNED_LONG(_type_name_, _field_name_) \
- SACS_SNPRINTF_FIELD(_type_name_, _field_name_, sacs_snprintf_unsigned_long, sizeof(unsigned long))
+  SACS_SNPRINTF_FIELD(_type_name_, _field_name_, sacs_snprintf_unsigned_long, sizeof(unsigned long))
 
 
 #define SACS_SNPRINTF_UNSIGNED_LONG_ARRAY(_type_name_, _field_name_, _size_) \
@@ -222,9 +223,9 @@ SACS_SNPRINTF_FIELD(_type_name_, _field_name_, sacs_snprintf_enum, sizeof(enum _
     .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
     .char_array_end = SACS_CHAR_ARRAY_END, \
     .flags = { \
-    .print_field_name = 1, \
-  } \
-}
+      .print_field_name = 1, \
+    } \
+  }
 
 
 
@@ -373,9 +374,10 @@ size_t sacs_snprintf(char* str, size_t str_size, struct SacsStructSnprintfer*);
 size_t sacs_snprintf_partial(char* str, size_t str_size, struct SacsStructSnprintfer*);
 
 
-/** Function to iterate over all elements in a string, calling the parse function for each.
+/** Function to iterate over all elements in a string, calling the print function for each.
  */
 size_t sacs_snprintf_array(struct SacsStructSnprintfer*, char* str, size_t str_size, const void* value, size_t value_size, size_t element_size, SacsSnprintfFieldCallback_t snprintf_function);
+
 
 
 

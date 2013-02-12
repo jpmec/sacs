@@ -1150,6 +1150,14 @@ size_t sacs_parse_unsigned_int(struct SacsStructParser* parser, void* dest, size
     *unsigned_int_ptr = -1 & result;
   }
   
+  if ((0 == count) && (0 == strncmp("UINT_MAX", str, 8)))
+  {
+    unsigned int* unsigned_int_value_ptr = dest;
+    *unsigned_int_value_ptr = UINT_MAX;
+    
+    count = 8; 
+  }  
+  
   return count;
 }
 

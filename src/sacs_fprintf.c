@@ -89,7 +89,7 @@ size_t sacs_fprintf_partial(FILE* file, struct SacsStructFprintfer* printer)
   {
     field_printer = &printer->printers_array[i];
     
-    if (printer->options.print_field_names)
+    if (printer->format.flags.print_field_name)
     {
       count += sacs_fprintf_field_name(printer, file, field_printer->name);
       count += printf("=");

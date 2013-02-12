@@ -731,10 +731,7 @@ static void test_sacs_parse_float(void)
   {
     float expect = 0.0;
     
-    const char test_parse_float_string[] = 
-    "  (struct TestSacsStruct) {  "
-    "    .value = 0.0,            "
-    "  };                         ";   
+    const char test_parse_float_string[] = " { .value = 0.0 } ";   
     
     struct struct_test_sacs_parse_float test_struct = {0};
     
@@ -749,10 +746,7 @@ static void test_sacs_parse_float(void)
   {
     float expect = 1.0;
     
-    const char test_parse_float_string[] = 
-    "  (struct TestSacsStruct) {  "
-    "    .value = 1.0,            "
-    "  };                         ";   
+    const char test_parse_float_string[] = " { .value = 1.0 } "; 
     
     struct struct_test_sacs_parse_float test_struct = {0};
     
@@ -767,10 +761,7 @@ static void test_sacs_parse_float(void)
   {
     float expect = 0.12345;
     
-    const char test_parse_float_string[] = 
-    "  (struct TestSacsStruct) {  "
-    "    .value = 0.12345,        "
-    "  };                         ";   
+    const char test_parse_float_string[] = " { .value = 0.12345 } ";
     
     struct struct_test_sacs_parse_float test_struct = {0};
     
@@ -1365,7 +1356,21 @@ static void test_sacs_parse_unsigned_int(void)
     
     assert(expect == test_struct.value);
   }  
+
   
+  // Test UINT_MAX
+  {
+    unsigned int expect = UINT_MAX;
+    
+    const char test_parse_unsigned_int_string[] = " { .value = UINT_MAX } ";   
+    
+    struct struct_test_sacs_parse_unsigned_int test_struct = {0};
+    
+    const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_parse_unsigned_int, &test_struct, test_parse_unsigned_int_string);
+    assert(parse_result == strlen(test_parse_unsigned_int_string));
+    
+    assert(expect == test_struct.value);
+  }   
 }
 
 
