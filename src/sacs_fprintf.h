@@ -150,6 +150,7 @@
 
 
 
+
 #define SACS_FPRINTF_FORMAT_DEFAULT \
   { \
     .str_before_field_name = SACS_STR_BEFORE_FIELD_NAME, \

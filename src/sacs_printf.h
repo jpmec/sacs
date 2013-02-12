@@ -19,34 +19,56 @@
 */
 
 
+#ifndef SACS_PRINTF_H
+#define SACS_PRINTF_H
+
+
+
+
+#define SACS_PRINTF_FIELD_TYPE(_type_name_, _field_name_, _macro_type_) \
+  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_##_macro_type_, sizeof(_macro_type_))
+
+
+#define SACS_PRINTF_FIELD_TYPE_ARRAY(_type_name_, _field_name_, _field_size_, _macro_type_) \
+  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_##_macro_type_##_array, _field_size_ * sizeof(_macro_type_))
 
 
 #define SACS_PRINTF_FIELD(_type_name_, _field_name_, _function_, _field_size_) \
   {offsetof(struct _type_name_, _field_name_), #_field_name_, _function_, _field_size_}
 
 
+
+
 #define SACS_PRINTF_BOOL(_type_name_, _field_name_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_bool, sizeof(bool))
+  SACS_PRINTF_FIELD_TYPE(_type_name_, _field_name_, bool)
 
 
 #define SACS_PRINTF_CHAR(_type_name_, _field_name_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_char, sizeof(char))
+  SACS_PRINTF_FIELD_TYPE(_type_name_, _field_name_, char)
+
+
+#define SACS_PRINTF_CHAR_STRING(_type_name_, _field_name_, _size_) \
+  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_char_string, _size_ * sizeof(char))
+
+
+#define SACS_PRINTF_ENUM(_type_name_, _enum_name_, _field_name_) \
+  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_enum, sizeof(enum _enum_name_))
 
 
 #define SACS_PRINTF_INT(_type_name_, _field_name_) \
-SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_int, sizeof(int))
+  SACS_PRINTF_FIELD_TYPE(_type_name_, _field_name_, int)
 
 
 #define SACS_PRINTF_INT_ARRAY(_type_name_, _field_name_, _size_) \
-SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_int_array, _size_ * sizeof(int))
+  SACS_PRINTF_FIELD_TYPE_ARRAY(_type_name_, _field_name_, _size_, int)
 
 
 #define SACS_PRINTF_LONG(_type_name_, _field_name_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_long, sizeof(long))
+  SACS_PRINTF_FIELD_TYPE(_type_name_, _field_name_, long)
 
 
 #define SACS_PRINTF_LONG_ARRAY(_type_name_, _field_name_, _size_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_long_array, _size_ * sizeof(long))
+  SACS_PRINTF_FIELD_TYPE_ARRAY(_type_name_, _field_name_, _size_, long)
 
 
 #define SACS_PRINTF_UNSIGNED_LONG(_type_name_, _field_name_) \
@@ -58,27 +80,19 @@ SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_int_array, _size_ * siz
 
 
 #define SACS_PRINTF_DOUBLE(_type_name_, _field_name_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_double, sizeof(double))
+  SACS_PRINTF_FIELD_TYPE(_type_name_, _field_name_, double)
 
 
 #define SACS_PRINTF_DOUBLE_ARRAY(_type_name_, _field_name_, _size_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_double_array, _size_ * sizeof(double))
+  SACS_PRINTF_FIELD_TYPE_ARRAY(_type_name_, _field_name_, _size_, double)
 
 
 #define SACS_PRINTF_FLOAT(_type_name_, _field_name_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_float, sizeof(float))
+  SACS_PRINTF_FIELD_TYPE(_type_name_, _field_name_, float)
 
 
 #define SACS_PRINTF_FLOAT_ARRAY(_type_name_, _field_name_, _size_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_float_array, _size_ * sizeof(float))
-
-
-#define SACS_PRINTF_CHAR_STRING(_type_name_, _field_name_, _size_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_char_string, _size_ * sizeof(char))
-
-
-#define SACS_PRINTF_ENUM(_type_name_, _enum_name_, _field_name_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_enum, sizeof(enum _enum_name_))
+  SACS_PRINTF_FIELD_TYPE_ARRAY(_type_name_, _field_name_, _size_, float)
 
 
 #define SACS_PRINTF_STRUCT(_type_name_, _struct_name_, _field_name_) \
@@ -90,35 +104,41 @@ SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_int_array, _size_ * siz
 
 
 #define SACS_PRINTF_UINT8(_type_name_, _field_name_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_uint8, sizeof(uint8_t))
+  SACS_PRINTF_FIELD_TYPE(_type_name_, _field_name_, uint8_t)
 
 
 #define SACS_PRINTF_UINT8_ARRAY(_type_name_, _field_name_, _size_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_uint8_array, _size_ * sizeof(uint8_t))
+  SACS_PRINTF_FIELD_TYPE_ARRAY(_type_name_, _field_name_, _size_, uint8_t)
+
+
+#define SACS_PRINTF_UINT8_BITFIELD(_type_name_, _field_name_, _size_) \
+  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_uint8_bitfield, sizeof(uint8_t))
 
 
 #define SACS_PRINTF_UINT16(_type_name_, _field_name_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_uint16, sizeof(uint16_t))
+  SACS_PRINTF_FIELD_TYPE(_type_name_, _field_name_, uint16_t)
 
 
 #define SACS_PRINTF_UINT16_ARRAY(_type_name_, _field_name_, _size_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_uint16_array, _size_ * sizeof(uint16_t))
+  SACS_PRINTF_FIELD_TYPE_ARRAY(_type_name_, _field_name_, _size_, uint16_t)
 
 
 #define SACS_PRINTF_UINT32(_type_name_, _field_name_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_uint32, sizeof(uint32_t))
+  SACS_PRINTF_FIELD_TYPE(_type_name_, _field_name_, uint32_t)
 
 
 #define SACS_PRINTF_UINT32_ARRAY(_type_name_, _field_name_, _size_) \
-SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_uint32_array, _size_ * sizeof(uint32_t))
+SACS_PRINTF_FIELD_TYPE_ARRAY(_type_name_, _field_name_, _size_, uint32_t)
 
 
 #define SACS_PRINTF_INT32(_type_name_, _field_name_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_int32, sizeof(int32_t))
+  SACS_PRINTF_FIELD_TYPE(_type_name_, _field_name_, int32_t)
 
 
 #define SACS_PRINTF_INT32_ARRAY(_type_name_, _field_name_, _size_) \
-  SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_int32_array, _size_ * sizeof(int32_t))
+  SACS_PRINTF_FIELD_TYPE_ARRAY(_type_name_, _field_name_, _size_, int32_t)
+
+
 
 
 #define SACS_FIELD_PRINTFER_ARRAY(_type_name_) \
@@ -129,6 +149,88 @@ SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_uint32_array, _size_ * 
   SACS_FIELD_PRINTER_ARRAY(_type_name_)
 
 
+
+
+#define SACS_PRINTF_FORMAT_DEFAULT \
+  { \
+    .str_before_field_name = SACS_STR_BEFORE_FIELD_NAME, \
+    .str_after_field_name = SACS_STR_AFTER_FIELD_NAME, \
+    .str_before_field_value = SACS_STR_BEFORE_FIELD_VALUE, \
+    .str_after_field_value = SACS_STR_AFTER_FIELD_VALUE, \
+    .str_before_field = SACS_STR_BEFORE_FIELD, \
+    .str_after_field = SACS_STR_AFTER_FIELD, \
+    .str_before_array_field = SACS_STR_BEFORE_ARRAY_FIELD, \
+    .str_after_array_field = SACS_STR_AFTER_ARRAY_FIELD, \
+    .str_field_name_value_separator = SACS_STR_FIELD_VALUE_SEPARATOR, \
+    .str_uint8_format = SACS_STR_UINT8_FORMAT, \
+    .str_uint16_format = SACS_STR_UINT16_FORMAT, \
+    .str_uint32_format = SACS_STR_UINT32_FORMAT, \
+    .char_field_value_separator = SACS_CHAR_FIELD_VALUE_SEPARATOR, \
+    .char_field_separator = SACS_CHAR_FIELD_SEPARATOR, \
+    .char_struct_begin = SACS_CHAR_STRUCT_BEGIN, \
+    .char_struct_end = SACS_CHAR_STRUCT_END, \
+    .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
+    .char_array_end = SACS_CHAR_ARRAY_END, \
+    .flags = { \
+      .print_field_name = 1, \
+    } \
+  }
+
+
+
+
+#define SACS_PRINTF_FORMAT_C89 \
+  { \
+    .str_before_field_name = SACS_STR_BEFORE_FIELD_NAME, \
+    .str_after_field_name = SACS_STR_AFTER_FIELD_NAME, \
+    .str_before_field = SACS_STR_BEFORE_FIELD, \
+    .str_after_field = SACS_STR_AFTER_FIELD, \
+    .str_before_array_field = SACS_STR_BEFORE_ARRAY_FIELD, \
+    .str_after_array_field = SACS_STR_AFTER_ARRAY_FIELD, \
+    .str_field_name_value_separator = SACS_STR_FIELD_VALUE_SEPARATOR, \
+    .str_uint8_format = SACS_STR_UINT8_FORMAT, \
+    .str_uint16_format = SACS_STR_UINT16_FORMAT, \
+    .str_uint32_format = SACS_STR_UINT32_FORMAT, \
+    .char_field_value_separator = SACS_CHAR_FIELD_VALUE_SEPARATOR, \
+    .char_field_separator = SACS_CHAR_FIELD_SEPARATOR, \
+    .char_struct_begin = SACS_CHAR_STRUCT_BEGIN, \
+    .char_struct_end = SACS_CHAR_STRUCT_END, \
+    .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
+    .char_array_end = SACS_CHAR_ARRAY_END, \
+    .flags = { \
+      .print_field_name = 0, \
+    } \
+  }
+
+
+
+
+#define SACS_PRINTF_FORMAT_PRETTY \
+  { \
+    .str_before_field_name = SACS_STR_BEFORE_FIELD_NAME_PRETTY, \
+    .str_after_field_name = SACS_STR_AFTER_FIELD_NAME_PRETTY, \
+    .str_before_field = SACS_STR_BEFORE_FIELD_PRETTY, \
+    .str_after_field = SACS_STR_AFTER_FIELD_PRETTY, \
+    .str_before_array_field = SACS_STR_BEFORE_ARRAY_FIELD_PRETTY, \
+    .str_after_array_field = SACS_STR_AFTER_ARRAY_FIELD_PRETTY, \
+    .str_field_name_value_separator = SACS_STR_FIELD_VALUE_SEPARATOR_PRETTY, \
+    .str_uint8_format = SACS_STR_UINT8_FORMAT, \
+    .str_uint16_format = SACS_STR_UINT16_FORMAT, \
+    .str_uint32_format = SACS_STR_UINT32_FORMAT, \
+    .char_field_value_separator = SACS_CHAR_FIELD_VALUE_SEPARATOR, \
+    .char_field_separator = SACS_CHAR_FIELD_SEPARATOR, \
+    .char_struct_begin = SACS_CHAR_STRUCT_BEGIN, \
+    .char_struct_end = SACS_CHAR_STRUCT_END, \
+    .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
+    .char_array_end = SACS_CHAR_ARRAY_END, \
+    .flags = { \
+      .print_field_name = 1, \
+    } \
+  }
+
+
+
+
 #define SACS_PRINTFER(_type_name_, _src_) \
   struct SacsStructPrintfer _type_name_##_sacs_printfer = \
   { \
@@ -137,6 +239,7 @@ SACS_PRINTF_FIELD(_type_name_, _field_name_, sacs_printf_uint32_array, _size_ * 
     .src_size = sizeof(struct _type_name_), \
     .printers_array = _type_name_##_sacs_field_printfers, \
     .printers_count = (sizeof(_type_name_##_sacs_field_printfers) / sizeof(struct SacsFieldPrintfer)) \
+    .format = SACS_PRINTF_FORMAT_DEFAULT, \
   };
 
 
@@ -177,9 +280,6 @@ struct SacsStructPrintfer
 
 
 
-/** Print an array of values using the given print function.
- */
-size_t sacs_printf_array(struct SacsStructPrintfer* printer, const void* value, size_t value_size, size_t element_size, SacsPrintfFieldCallback_t print_function);
 
 
 /** Parse a string and convert to a C structure.
@@ -196,134 +296,42 @@ size_t sacs_printf(struct SacsStructPrintfer* printer);
 size_t sacs_printf_partial(struct SacsStructPrintfer* printer);
 
 
-/** Print a boolean value using printf.
- *  Returns number of chars printed.
+/** Print an array of values using the given print function.
  */
-size_t sacs_printf_bool(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
+size_t sacs_printf_array(struct SacsStructPrintfer* printer, const void* value, size_t value_size, size_t element_size, SacsPrintfFieldCallback_t print_function);
 
 
-/** Print a single character using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_char(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
 
 
-/** Print a null-terminated string of characters using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_char_string(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
+#define DECLARE_SACS_PRINTF_TYPE(_typename_) \
+  size_t sacs_printf_##_typename_(struct SacsStructPrintfer*, const void* value, size_t value_size)
 
 
-/** Print an enum string using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_enum(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
+
+DECLARE_SACS_PRINTF_TYPE(bool);
+DECLARE_SACS_PRINTF_TYPE(char);
+DECLARE_SACS_PRINTF_TYPE(char_string);
+DECLARE_SACS_PRINTF_TYPE(enum);
+DECLARE_SACS_PRINTF_TYPE(int);
+DECLARE_SACS_PRINTF_TYPE(int_array);
+DECLARE_SACS_PRINTF_TYPE(long);
+DECLARE_SACS_PRINTF_TYPE(long_array);
+DECLARE_SACS_PRINTF_TYPE(unsigned_long);
+DECLARE_SACS_PRINTF_TYPE(unsigned_long_array);
+DECLARE_SACS_PRINTF_TYPE(double);
+DECLARE_SACS_PRINTF_TYPE(double_array);
+DECLARE_SACS_PRINTF_TYPE(float);
+DECLARE_SACS_PRINTF_TYPE(float_array);
+DECLARE_SACS_PRINTF_TYPE(uint8);
+DECLARE_SACS_PRINTF_TYPE(uint8_array);
+DECLARE_SACS_PRINTF_TYPE(uint16);
+DECLARE_SACS_PRINTF_TYPE(uint16_array);
+DECLARE_SACS_PRINTF_TYPE(uint32);
+DECLARE_SACS_PRINTF_TYPE(uint32_array);
+DECLARE_SACS_PRINTF_TYPE(int32);
+DECLARE_SACS_PRINTF_TYPE(int32_array);
 
 
-/** Print a int using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_int(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
 
 
-/** Print a int array using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_int_array(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print a long using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_long(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print a long array using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_long_array(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print an unsigned long using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_unsigned_long(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print an unsigned long array using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_unsigned_long_array(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print a double using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_double(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print a double using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_double_array(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print a float using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_float(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print a float using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_float_array(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print a uint8_t using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_uint8(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print a uint8_t array using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_uint8_array(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print a uint16_t using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_uint16(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print a uint16_t array using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_uint16_array(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print a uint32_t using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_uint32(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print a uint32_t array using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_uint32_array(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print an int32_t using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_int32(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
-
-/** Print an int32_t array using printf.
- *  Returns number of chars printed.
- */
-size_t sacs_printf_int32_array(struct SacsStructPrintfer* printer, const void* value, size_t value_size);
-
+#endif

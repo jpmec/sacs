@@ -150,6 +150,7 @@ SACS_SNPRINTF_FIELD(_type_name_, _field_name_, sacs_snprintf_enum, sizeof(enum _
 
 
 
+
 #define SACS_SNPRINTF_FORMAT_DEFAULT \
   { \
     .str_before_field_name = SACS_STR_BEFORE_FIELD_NAME, \
