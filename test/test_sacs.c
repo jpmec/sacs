@@ -17,8 +17,8 @@
 #include "test_sacs_fprintf.h"
 #include "test_sacs_fprintf.c"
 
-#include "test_sacs_printf.h"
-#include "test_sacs_printf.c"
+//#include "test_sacs_printf.h"
+//#include "test_sacs_printf.c"
 
 #include "test_sacs_json.h"
 #include "test_sacs_json.c"
@@ -34,7 +34,7 @@ int test_sacs(void)
   test_sacs_parse();
   test_sacs_snprintf();
   test_sacs_fprintf();
-  test_sacs_printf();
+//  test_sacs_printf();
 
   test_sacs_json();
 

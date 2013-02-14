@@ -24,7 +24,7 @@
 
 
 #include "sacs_const.h"
-
+#include "sacs_format.h"
 
 
 
@@ -202,15 +202,15 @@ struct SacsFieldParser
 
 
 
-struct SacsStructFormat
-{
-  char char_field_value_separator;
-  char char_field_separator;
-  char char_struct_begin;
-  char char_struct_end; 
-  char char_array_begin;
-  char char_array_end; 
-};
+//struct SacsStructFormat
+//{
+//  char char_field_value_separator;
+//  char char_field_separator;
+//  char char_struct_begin;
+//  char char_struct_end; 
+//  char char_array_begin;
+//  char char_array_end; 
+//};
 
 
 
@@ -278,155 +278,163 @@ size_t sacs_parse_partial(struct SacsStructParser* parser, const char* str);
 
 
 
+
+
+#define DECLARE_SACS_PARSE_TYPE(_typename_) \
+  size_t sacs_parse_##_typename_(struct SacsStructParser*, void* dest, size_t dest_size, const char* str)
+
+
+
+
 /** Parse a boolean value.
  *  Returns number of chars parsed.
  */
-size_t sacs_parse_bool(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(bool);
 
 
 /** Parse a single character.
  *  Returns number of chars parsed.
  */
-size_t sacs_parse_char(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(char);
 
 
 /** Parse an array of characters.
  *  Array is not required to be null-terminated.
  *  Returns number of chars parsed.
  */
-size_t sacs_parse_char_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(char_array);
 
 
 /** Parse a null-terminated string of characters.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_char_string(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(char_string);
 
 
 /** Parse a double using strtod.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_double(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(double);
 
 
 /** Parse an array of doubles using strtod.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_double_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(double_array);
 
 
 /** Parse an enumeration.
  *  Returns number of chars parsed.
  */
-size_t sacs_parse_enum(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(enum);
 
 
 /** Parse a float using atof.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_float(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(float);
 
 
 /** Parse an array of floats using atof.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_float_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(float_array);
 
 
 /** Parse an int using strtol.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_int(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(int);
 
 
 /** Parse a int array using strtol.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_int_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(int_array);
 
 
 /** Parse a long using strtol.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_long(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(long);
 
 
 /** Parse a long array using strtol.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_long_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(long_array);
 
 
 /** Parse an unsigned int.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_unsigned_int(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(unsigned_int);
 
 
 /** Parse an unsigned int.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_unsigned_int_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(unsigned_int_array);
 
 
 /** Parse an unsigned long using strtoul.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_unsigned_long(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(unsigned_long);
 
 
 /** Parse an unsigned long using strtoul.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_unsigned_long_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(unsigned_long_array);
 
 
 /** Parse a uint8_t using strtoul.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_uint8(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(uint8);
 
 
 /** Parse a uint8_t using strtoul.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_uint8_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(uint8_array);
 
 
 /** Parse a uint16_t using strtoul.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_uint16(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(uint16);
 
 
 /** Parse a uint16_t array using strtoul.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_uint16_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(uint16_array);
 
 
 /** Parse a uint32_t using strtoul.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_uint32(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(uint32);
 
 
 /** Parse a uint32_t array using strtoul.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_uint32_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(uint32_array);
 
 
 /** Parse a int32_t using strtol.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_int32(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(int32);
 
 
 /** Parse a int32_t using strtol.
  *  Returns number of chars parsed. 
  */
-size_t sacs_parse_int32_array(struct SacsStructParser* parser, void* dest, size_t dest_size, const char* str);
+DECLARE_SACS_PARSE_TYPE(int32_array);
 
 
 

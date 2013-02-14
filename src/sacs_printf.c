@@ -23,6 +23,7 @@
 
 
 #include "sacs.h"
+#include "sacs_fprintf.h"
 
 #include <assert.h>
 #include <ctype.h>
@@ -47,7 +48,7 @@ size_t sacs_printf_array(struct SacsStructPrintfer* printer, const void* value, 
   
   do
   {
-    file_count += print_function(value, element_size);  
+    file_count += print_function(printer, value, element_size);  
     
     value += element_size;
     

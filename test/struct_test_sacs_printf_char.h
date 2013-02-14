@@ -18,8 +18,8 @@
 #include "../src/sacs_parsable.h"
 #include "struct_test_sacs_printf_char.sac"
 
-//#include "../src/sacs_printfable.h"
-//#include "struct_test_sacs_printf_char.sac"
+#include "../src/sacs_printfable.h"
+#include "struct_test_sacs_printf_char.sac"
 
 
 

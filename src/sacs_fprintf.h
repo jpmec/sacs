@@ -72,11 +72,11 @@
 
 
 #define SACS_FPRINTF_UNSIGNED_LONG(_type_name_, _field_name_) \
-  SACS_FPRINTF_FIELD_TYPE(_type_name_, _field_name_, unsigned long)
+  SACS_FPRINTF_FIELD(_type_name_, _field_name_, sacs_fprintf_unsigned_long, sizeof(unsigned long))
 
 
 #define SACS_FPRINTF_UNSIGNED_LONG_ARRAY(_type_name_, _field_name_, _size_) \
-  SACS_FPRINTF_FIELD(_type_name_, _field_name_, sacs_fprintf_unsigned_long, sizeof(unsigned long))
+  SACS_FPRINTF_FIELD(_type_name_, _field_name_, sacs_fprintf_unsigned_long_array, _size_ * sizeof(unsigned long))
 
 
 #define SACS_FPRINTF_DOUBLE(_type_name_, _field_name_) \
@@ -258,8 +258,8 @@
   { \
     return sacs_fprintf_array(printer, file, value, value_size, sizeof(struct _type_name_), _type_name_##_sacs_fprintf); \
   } \
-  size_t _type_name_##_sacs_fprintf_type(FILE* file, const void* value, size_t value_size, struct SacsStructFprintfFormat* format); \
-  size_t _type_name_##_sacs_fprintf_type(FILE* file, const void* value, size_t value_size, struct SacsStructFprintfFormat* format) \
+  size_t _type_name_##_sacs_fprintf_type(FILE* file, const void* value, size_t value_size, struct SacsStructFormat* format); \
+  size_t _type_name_##_sacs_fprintf_type(FILE* file, const void* value, size_t value_size, struct SacsStructFormat* format) \
   { \
     if (format) \
     { \
@@ -298,50 +298,50 @@ struct SacsFieldFprintfer
 
 
 
-struct SacsStructFprintfFormatFlags
-{
-  unsigned print_field_name : 1;
-  unsigned print_hex_prefix : 1;
-};
+//struct SacsStructFprintfFormatFlags
+//{
+//  unsigned print_field_name : 1;
+//  unsigned print_hex_prefix : 1;
+//};
 
 
 
 
-struct SacsStructFprintfFormat
-{
-  const char* str_before_field_name;
-  const char* str_after_field_name;
-  const char* str_before_field_value;
-  const char* str_after_field_value;  
-  const char* str_before_field;
-  const char* str_after_field;
-  const char* str_before_array_field;
-  const char* str_after_array_field;   
-  const char* str_field_name_value_separator;
-  
-  const char* str_uint8_format;  
-  const char* str_uint16_format;  
-  const char* str_uint32_format;
-  
-  char char_field_value_separator;
-  char char_field_separator;
-  char char_struct_begin;
-  char char_struct_end; 
-  char char_array_begin;
-  char char_array_end;
-  
-  int indent_space_count;  ///< Number of spaces for each indent level.
-  
-  struct SacsStructFprintfFormatFlags flags;
-};
+//struct SacsStructFprintfFormat
+//{
+//  const char* str_before_field_name;
+//  const char* str_after_field_name;
+//  const char* str_before_field_value;
+//  const char* str_after_field_value;  
+//  const char* str_before_field;
+//  const char* str_after_field;
+//  const char* str_before_array_field;
+//  const char* str_after_array_field;   
+//  const char* str_field_name_value_separator;
+//  
+//  const char* str_uint8_format;  
+//  const char* str_uint16_format;  
+//  const char* str_uint32_format;
+//  
+//  char char_field_value_separator;
+//  char char_field_separator;
+//  char char_struct_begin;
+//  char char_struct_end; 
+//  char char_array_begin;
+//  char char_array_end;
+//  
+//  int indent_space_count;  ///< Number of spaces for each indent level.
+//  
+//  struct SacsStructFprintfFormatFlags flags;
+//};
 
 
 
 
-struct SacsStructFprintfState
-{
-  int indent;  ///< Number of indentions
-};
+//struct SacsStructFprintfState
+//{
+//  int indent;  ///< Number of indentions
+//};
 
 
 
@@ -355,21 +355,23 @@ struct SacsStructFprintfer
   const void* src;
   size_t src_size;
   
-  struct SacsStructFprintfFormat format;
-  struct SacsStructFprintfState state;
+  struct SacsStructFormat format;
+  struct SacsStructFormatState state;
 };
 
 
 
 
-
-/** Print a C structure.
+/** Parse a string and convert to a C structure.
  *  The string must be formatted like a C initializer.
+ *  All data in destination is set to 0 before processing the string.
  */
 size_t sacs_fprintf(FILE* file, struct SacsStructFprintfer* printer);
 
 
-/** Print part of a C structure.
+/** Parse a string and convert to a C structure.
+ *  String may represent only a part of a complete initializer.
+ *  Does not affect destination data that is not found in the string.
  */
 size_t sacs_fprintf_partial(FILE* file, struct SacsStructFprintfer* printer);
 
@@ -413,4 +415,3 @@ DECLARE_SACS_FPRINTF_TYPE(int32_array);
 
 
 #endif
-

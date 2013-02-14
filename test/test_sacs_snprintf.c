@@ -8,7 +8,7 @@
 #include "struct_test_sacs_snprintf_chars.h"
 
 #include "../src/sacs_util.h"
-
+#include "../src/sacs_format.h"
 
 #include <assert.h>
 
@@ -21,7 +21,7 @@ static void test_cycle_sacs_snprintf_char(const char* expect_string, const char*
 {
   struct struct_test_sacs_snprintf_char test_struct = {0};
   char result_string[256] = {0};
-  struct SacsStructSnprintfFormat format = SACS_SNPRINTF_FORMAT_DEFAULT;  
+  struct SacsStructFormat format = SACS_FORMAT_DEFAULT;  
 
   const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_snprintf_char, &test_struct, test_string);
   assert(parse_result == strlen(test_string));  
@@ -49,7 +49,7 @@ static void test_cycle_sacs_snprintf_chars(const char* expect_string, const char
   assert(snprintf_result == strlen(test_string));
   
   char result_string[256] = {0};
-  struct SacsStructSnprintfFormat format = SACS_SNPRINTF_FORMAT_DEFAULT;
+  struct SacsStructFormat format = SACS_FORMAT_DEFAULT;
   
   const size_t result_string_size = SACS_SNPRINTF_TYPE(struct_test_sacs_snprintf_chars, &test_struct, result_string, sizeof(result_string), &format);  
   assert(result_string_size == strlen(expect_string));
