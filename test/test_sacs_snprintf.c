@@ -61,6 +61,13 @@ static void test_cycle_sacs_snprintf_char(const char* expect_string, const char*
   assert(xml_string_size == strlen(result_string));  
   puts(result_string);
   
+  
+  memset(result_string, 0, sizeof(result_string));
+  const size_t yaml_string_size = SACS_SNPRINTF_TYPE_AS_YAML(struct_test_sacs_snprintf_char, &test_struct, result_string, sizeof(result_string));
+  
+  assert(yaml_string_size == strlen(result_string));  
+  puts(result_string);  
+  
 }
 
 
@@ -85,17 +92,24 @@ static void test_cycle_sacs_snprintf_chars(const char* expect_string, const char
   
   
   memset(result_string, 0, sizeof(result_string));
-  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_char, &test_struct, result_string, sizeof(result_string));
+  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_chars, &test_struct, result_string, sizeof(result_string));
   
   assert(json_string_size == strlen(result_string));  
   puts(result_string);  
   
   
   memset(result_string, 0, sizeof(result_string));
-  const size_t xml_string_size = SACS_SNPRINTF_TYPE_AS_XML(struct_test_sacs_snprintf_char, &test_struct, result_string, sizeof(result_string));
+  const size_t xml_string_size = SACS_SNPRINTF_TYPE_AS_XML(struct_test_sacs_snprintf_chars, &test_struct, result_string, sizeof(result_string));
   
   assert(xml_string_size == strlen(result_string));  
   puts(result_string);  
+  
+  
+  memset(result_string, 0, sizeof(result_string));
+  const size_t yaml_string_size = SACS_SNPRINTF_TYPE_AS_YAML(struct_test_sacs_snprintf_chars, &test_struct, result_string, sizeof(result_string));
+  
+  assert(yaml_string_size == strlen(result_string));  
+  puts(result_string);    
 }
 
 
@@ -130,7 +144,14 @@ static void test_cycle_sacs_snprintf_int(const char* expect_string, const char* 
   const size_t xml_string_size = SACS_SNPRINTF_TYPE_AS_XML(struct_test_sacs_snprintf_int, &test_struct, result_string, sizeof(result_string));
   
   assert(xml_string_size == strlen(result_string));  
-  puts(result_string);  
+  puts(result_string);
+  
+
+  memset(result_string, 0, sizeof(result_string));
+  const size_t yaml_string_size = SACS_SNPRINTF_TYPE_AS_YAML(struct_test_sacs_snprintf_int, &test_struct, result_string, sizeof(result_string));
+  
+  assert(yaml_string_size == strlen(result_string));  
+  puts(result_string);   
 }
 
 
@@ -165,7 +186,14 @@ static void test_cycle_sacs_snprintf_int_array(const char* expect_string, const 
   const size_t xml_string_size = SACS_SNPRINTF_TYPE_AS_XML(struct_test_sacs_snprintf_int_array, &test_struct, result_string, sizeof(result_string));
   
   assert(xml_string_size == strlen(result_string));  
-  puts(result_string);  
+  puts(result_string);
+  
+
+  memset(result_string, 0, sizeof(result_string));
+  const size_t yaml_string_size = SACS_SNPRINTF_TYPE_AS_YAML(struct_test_sacs_snprintf_int_array, &test_struct, result_string, sizeof(result_string));
+  
+  assert(yaml_string_size == strlen(result_string));  
+  puts(result_string);     
 }
 
 
@@ -200,6 +228,13 @@ static void test_cycle_sacs_snprintf_float(const char* expect_string, const char
   const size_t xml_string_size = SACS_SNPRINTF_TYPE_AS_XML(struct_test_sacs_snprintf_float, &test_struct, result_string, sizeof(result_string));
   
   assert(xml_string_size == strlen(result_string));  
+  puts(result_string);
+  
+
+  memset(result_string, 0, sizeof(result_string));
+  const size_t yaml_string_size = SACS_SNPRINTF_TYPE_AS_YAML(struct_test_sacs_snprintf_float, &test_struct, result_string, sizeof(result_string));
+  
+  assert(yaml_string_size == strlen(result_string));  
   puts(result_string);   
 }
 
@@ -236,6 +271,13 @@ static void test_cycle_sacs_snprintf_double(const char* expect_string, const cha
   
   assert(xml_string_size == strlen(result_string));  
   puts(result_string);     
+  
+  
+  memset(result_string, 0, sizeof(result_string));
+  const size_t yaml_string_size = SACS_SNPRINTF_TYPE_AS_YAML(struct_test_sacs_snprintf_double, &test_struct, result_string, sizeof(result_string));
+  
+  assert(yaml_string_size == strlen(result_string));  
+  puts(result_string);   
 }
 
 

@@ -60,6 +60,9 @@
       .char_struct_end = SACS_XML_CHAR_STRUCT_END, \
       .char_array_begin = SACS_XML_CHAR_ARRAY_BEGIN, \
       .char_array_end = SACS_XML_CHAR_ARRAY_END, \
+      .flags = { \
+        .print_field_name = 1, \
+      } \
     }; \
     return sacs_snprintf(dest, dest_size, &_type_name_##_sacs_snprintfer); \
   } \

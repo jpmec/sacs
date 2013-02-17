@@ -27,4 +27,8 @@
 #include "../src/sacs_xmlable.h"
 #include "struct_test_sacs_snprintf_double.sac"
 
+#include "../src/sacs_yamlable.h"
+#include "struct_test_sacs_snprintf_double.sac"
+
+
 #endif

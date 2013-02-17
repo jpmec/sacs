@@ -36,6 +36,7 @@
     .str_after_field = SACS_STR_AFTER_FIELD, \
     .str_before_array_field = SACS_STR_BEFORE_ARRAY_FIELD, \
     .str_after_array_field = SACS_STR_AFTER_ARRAY_FIELD, \
+    .str_field_value_separator = SACS_STR_FIELD_VALUE_SEPARATOR, \
     .str_field_name_value_separator = SACS_STR_FIELD_VALUE_SEPARATOR, \
     .str_uint8_format = SACS_STR_UINT8_FORMAT, \
     .str_uint16_format = SACS_STR_UINT16_FORMAT, \
@@ -134,6 +135,7 @@ struct SacsStructFormat
   const char* str_before_array_field;
   const char* str_after_array_field;   
   const char* str_field_name_value_separator;
+  const char* str_field_value_separator;
 
   const char* str_uint8_format;  
   const char* str_uint16_format;  
