@@ -24,6 +24,7 @@ The SACS library:
 
 The SACS library is free! (See the License below)
 
+
 Data types
 ----------
 The data types supported by SACS can be found in the sacs.h file.  
@@ -46,9 +47,13 @@ A SACS parser should support any legal C syntax for initializing a structure.
 
 The Emitters
 ------------
-SACS can convert C structures into null-terminated strings.
-SACS wlll, by default, emit valid C structure syntax.
-SACS can also emit other formats, such as JSON.
+SACS can convert C structures into null-terminated strings.  The default SACS behavior is to emit valid C structure syntax.
+
+SACS can also emit other formats, such as JSON, XML and YAML.
+
+**All valid C structures can be emitted as valid JSON, XML and YAML.**
+
+**Not all valid JSON, XML and YAML can be parsed as a valid C structure.**
 
 
 
@@ -66,6 +71,16 @@ The Ugly
 The SACS framework is built using the C preprocessor.  
 Therefore, any problem with formatting when writing C code that uses SACS causes weird, hard to debug compiler messages.
 This problem may or may not improve in the future.  The code is freely available for examination.
+
+
+
+The FAQs
+========
+
+
+**SACS doesn't work with Microsoft Visual C++?**
+Microsoft Visual C++ does not support C99 features such as named designators.
+Also, Microsoft Visual C++ does not compile C99 code.  Therefore, SACS probably won't ever work with MSVC++.  Sorry.  The source code is available if you want to port it yourself.
 
 
 
@@ -88,3 +103,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+
+The Extras
+==========
+I hope you find the SACS library to be useful.  If you use it in a project, please send me a link, I'd love to know how it is being used in the wild.  Also, if you find a bug or make a great improvement, then make a Pull Request and I'll try to integrate the fix or feature.  Thanks!
