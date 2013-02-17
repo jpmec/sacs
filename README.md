@@ -76,6 +76,14 @@ This problem may or may not improve in the future.  The code is freely available
 
 The FAQs
 ========
+
+**Why?**
+
+A simple structured data parser and emitter has emerged as a need for simple systems written in C.  Today, most of these simple systems interact with other more complex systems, thus the ability to communicate easily with these systems is needed.  For example see the links below:
+
+* http://stackoverflow.com/questions/842169/xml-to-c-struct-and-c-struct-to-xml
+
+
 **What version is the latest SACS library?**
 
 SACS is not mature enough to have version numbers, try back later.
@@ -87,7 +95,7 @@ NO!  Please look elsewhere.  SACS should only be used for applications that will
 
 **SACS doesn't work with Microsoft Visual C++?**
 
-Microsoft Visual C++ does not support C99 features such as named designators.
+Microsoft Visual C++ does not support C99 features such as designated initializers.
 Also, Microsoft Visual C++ does not compile C99 code.  Therefore, SACS probably won't ever work with MSVC++.  Sorry.  The source code is available if you want to port it yourself.
 
 
