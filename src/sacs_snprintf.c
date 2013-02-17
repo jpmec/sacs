@@ -121,26 +121,63 @@ static size_t sacs_snprintf_field_name(struct SacsStructSnprintfer* printer, cha
   assert(str_size);
   assert(field_name);
   
-  char* str_begin = str;
+  char* char_ptr = str;
   
   if (printer->format.str_before_field_name)
   {
-    const size_t count = snprintf(str, str_size, "%s", printer->format.str_before_field_name);    
-    str += count;
+    const size_t count = snprintf(char_ptr, str_size, "%s", printer->format.str_before_field_name);    
+    char_ptr += count;
+    str_size -= count;
   }
   
   
-  const size_t count = snprintf(str, str_size, "%s", field_name);
-  str += count;
+  const size_t count = snprintf(char_ptr, str_size, "%s", field_name);
+  char_ptr += count;
+  str_size -= count;
   
   
   if (printer->format.str_after_field_name)
   {
-    const size_t count = snprintf(str, str_size, "%s", printer->format.str_after_field_name);    
-    str += count;
+    const size_t count = snprintf(char_ptr, str_size, "%s", printer->format.str_after_field_name);    
+    char_ptr += count;
+    str_size -= count;
   }
   
-  return str - str_begin;
+  return char_ptr - str;
+}
+
+
+
+
+static size_t sacs_snprintf_field_value(struct SacsStructSnprintfer* printer, char* str, size_t str_size, const struct SacsFieldSnprintfer* field_printer)
+{
+  assert(printer);
+  assert(str);
+  assert(str_size);
+  assert(field_printer);
+
+  char* char_ptr = str;
+  
+  if (printer->format.str_before_field)
+  {
+    size_t count = snprintf(char_ptr, str_size, "%s", printer->format.str_before_field);
+    char_ptr += count;
+    str_size -= count;
+  }
+  
+  const void* src = printer->src + field_printer->field_offset;
+  size_t count = field_printer->function(printer, char_ptr, str_size, src, field_printer->field_size);
+  char_ptr += count;
+  str_size -= count;
+  
+  if (printer->format.str_after_field)
+  {
+    size_t count = snprintf(char_ptr, str_size, "%s", printer->format.str_after_field);
+    char_ptr += count;
+    str_size -= count;
+  }
+  
+  return char_ptr - str;
 }
 
 
@@ -155,17 +192,13 @@ size_t sacs_snprintf_partial(char* str, size_t str_size, struct SacsStructSnprin
   char* char_ptr = str;
   size_t count = 0;
   
-//  const struct SacsFieldSnprintfer* field_printer = NULL;
   const struct SacsFieldSnprintfer* field_printer = printer->printers_array;
   
   size_t printers_count = printer->printers_count;
   
-  //for (size_t i = 0; i < printer->printers_count; ++i)
   do
   {
-//    field_printer = &printer->printers_array[i];
-    
-    if (printer->format.flags.print_field_name)
+    if (printer->format.flags.print_field_name_before_value)
     {
       count = sacs_snprintf_field_name(printer, char_ptr, str_size, field_printer->name);
       char_ptr += count;
@@ -179,21 +212,15 @@ size_t sacs_snprintf_partial(char* str, size_t str_size, struct SacsStructSnprin
       }
     }
     
-    if (printer->format.str_before_field)
-    {
-      count = snprintf(char_ptr, str_size, "%s", printer->format.str_before_field);
-      char_ptr += count;
-      str_size -= count;
-    }
     
-    const void* src = printer->src + field_printer->field_offset;
-    count = field_printer->function(printer, char_ptr, str_size, src, field_printer->field_size);
+    count = sacs_snprintf_field_value(printer, char_ptr, str_size, field_printer);
     char_ptr += count;
     str_size -= count;
-  
-    if (printer->format.str_after_field)
+
+    
+    if (printer->format.flags.print_field_name_after_value)
     {
-      count = snprintf(char_ptr, str_size, "%s", printer->format.str_after_field);
+      count = sacs_snprintf_field_name(printer, char_ptr, str_size, field_printer->name);
       char_ptr += count;
       str_size -= count;
     }    

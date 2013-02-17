@@ -150,7 +150,7 @@
 
 
 
-
+// TODO REMOVE THESE FORMATS AND USE sacs_format.h
 #define SACS_FPRINTF_FORMAT_DEFAULT \
   { \
     .str_before_field_name = SACS_STR_BEFORE_FIELD_NAME, \
@@ -172,7 +172,7 @@
     .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
     .char_array_end = SACS_CHAR_ARRAY_END, \
     .flags = { \
-      .print_field_name = 1, \
+      .print_field_name_before_value = 1, \
     } \
   }
 
@@ -198,7 +198,7 @@
     .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
     .char_array_end = SACS_CHAR_ARRAY_END, \
     .flags = { \
-      .print_field_name = 0, \
+      .print_field_name_before_value = 0, \
     } \
   }
 
@@ -224,7 +224,7 @@
     .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
     .char_array_end = SACS_CHAR_ARRAY_END, \
     .flags = { \
-      .print_field_name = 1, \
+      .print_field_name_before_value = 1, \
     } \
   }
 

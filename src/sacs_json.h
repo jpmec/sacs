@@ -43,7 +43,7 @@
 #define SACS_JSON_STR_BEFORE_FIELD_NAME    "\""
 #define SACS_JSON_STR_AFTER_FIELD_NAME     "\""
 
-#define SACS_JSON_STR_FIELD_VALUE_SEPARATOR     "="
+#define SACS_JSON_STR_FIELD_VALUE_SEPARATOR     ":"
 
 #define SACS_JSON_STR_BEFORE_FIELD_VALUE        NULL
 #define SACS_JSON_STR_AFTER_FIELD_VALUE         NULL
@@ -87,7 +87,7 @@
       .char_char_begin = SACS_JSON_CHAR_CHAR_BEGIN, \
       .char_char_end = SACS_JSON_CHAR_CHAR_END, \
       .flags = { \
-        .print_field_name = 1, \
+        .print_field_name_before_value = 1, \
       } \
     }; \
     return sacs_snprintf(dest, dest_size, &_type_name_##_sacs_snprintfer); \

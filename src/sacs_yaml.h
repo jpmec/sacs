@@ -37,16 +37,20 @@
 #define SACS_YAML_CHAR_ARRAY_BEGIN    '\n'
 #define SACS_YAML_CHAR_ARRAY_END      '\0'
 
+#define SACS_YAML_STR_BEFORE_FIELD_VALUE        NULL
+#define SACS_YAML_STR_AFTER_FIELD_VALUE         NULL
 
-#define SACS_YAML_STR_FIELD_VALUE_SEPARATOR     ": "
-#define SACS_YAML_STR_BEFORE_FIELD_NAME         NULL
-#define SACS_YAML_STR_AFTER_FIELD_NAME          NULL
+#define SACS_YAML_STR_FIELD_NAME_VALUE_SEPARATOR     ": "
+#define SACS_YAML_STR_FIELD_VALUE_SEPARATOR          ": "
+#define SACS_YAML_STR_BEFORE_FIELD_NAME              NULL
+#define SACS_YAML_STR_AFTER_FIELD_NAME               NULL
 
 #define SACS_YAML_STR_BEFORE_FIELD              NULL
 #define SACS_YAML_STR_AFTER_FIELD               NULL
 
 #define SACS_YAML_STR_BEFORE_ARRAY_FIELD         "- "
 #define SACS_YAML_STR_AFTER_ARRAY_FIELD         NULL
+
 
 
 
@@ -58,10 +62,14 @@
   _type_name_##_sacs_snprintfer.format = (struct SacsStructFormat) { \
     .str_before_field_name = SACS_YAML_STR_BEFORE_FIELD_NAME, \
     .str_after_field_name = SACS_YAML_STR_AFTER_FIELD_NAME, \
+    .str_before_field_value = SACS_YAML_STR_BEFORE_FIELD_VALUE, \
+    .str_after_field_value = SACS_YAML_STR_AFTER_FIELD_VALUE, \
     .str_before_field = SACS_YAML_STR_BEFORE_FIELD, \
     .str_after_field = SACS_YAML_STR_AFTER_FIELD, \
     .str_before_array_field = SACS_YAML_STR_BEFORE_ARRAY_FIELD, \
+    .str_after_array_field = SACS_YAML_STR_AFTER_ARRAY_FIELD, \
     .str_field_value_separator = SACS_YAML_STR_FIELD_VALUE_SEPARATOR, \
+    .str_field_name_value_separator = SACS_YAML_STR_FIELD_VALUE_SEPARATOR, \
     .char_field_value_separator = SACS_YAML_CHAR_FIELD_VALUE_SEPARATOR, \
     .char_field_separator = SACS_YAML_CHAR_FIELD_SEPARATOR, \
     .char_struct_begin = SACS_YAML_CHAR_STRUCT_BEGIN, \
@@ -69,7 +77,7 @@
     .char_array_begin = SACS_YAML_CHAR_ARRAY_BEGIN, \
     .char_array_end = SACS_YAML_CHAR_ARRAY_END, \
     .flags = { \
-      .print_field_name = 1, \
+      .print_field_name_before_value = 1, \
     } \
   }; \
     return sacs_snprintf(dest, dest_size, &_type_name_##_sacs_snprintfer); \

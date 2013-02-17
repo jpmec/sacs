@@ -50,7 +50,7 @@
     .char_char_begin = SACS_CHAR_CHAR_BEGIN, \
     .char_char_end = SACS_CHAR_CHAR_END, \
     .flags = { \
-      .print_field_name = 1, \
+      .print_field_name_before_value = 1, \
     } \
   }
 
@@ -78,7 +78,7 @@
     .char_char_begin = SACS_CHAR_CHAR_BEGIN, \
     .char_char_end = SACS_CHAR_CHAR_END, \
     .flags = { \
-      .print_field_name = 0, \
+      .print_field_name_before_value = 0, \
     } \
   }
 
@@ -106,7 +106,7 @@
     .char_char_begin = SACS_CHAR_CHAR_BEGIN, \
     .char_char_end = SACS_CHAR_CHAR_END, \
     .flags = { \
-      .print_field_name = 1, \
+      .print_field_name_before_value = 1, \
     } \
   }
 
@@ -117,7 +117,8 @@
 
 struct SacsStructFormatFlags
 {
-  unsigned print_field_name : 1;
+  unsigned print_field_name_before_value : 1;
+  unsigned print_field_name_after_value : 1;
   unsigned print_hex_prefix : 1;
 };
 

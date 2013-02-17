@@ -30,8 +30,8 @@
 #define SACS_XML_CHAR_FIELD_SEPARATOR          ','
 #define SACS_XML_CHAR_FIELD_VALUE_SEPARATOR    '\0'
 
-#define SACS_XML_CHAR_STRUCT_BEGIN    '{'
-#define SACS_XML_CHAR_STRUCT_END      '}'
+#define SACS_XML_CHAR_STRUCT_BEGIN    NULL
+#define SACS_XML_CHAR_STRUCT_END      NULL
 
 #define SACS_XML_CHAR_ARRAY_BEGIN    '['
 #define SACS_XML_CHAR_ARRAY_END      ']'
@@ -61,7 +61,8 @@
       .char_array_begin = SACS_XML_CHAR_ARRAY_BEGIN, \
       .char_array_end = SACS_XML_CHAR_ARRAY_END, \
       .flags = { \
-        .print_field_name = 1, \
+        .print_field_name_before_value = 1, \
+        .print_field_name_after_value = 1, \
       } \
     }; \
     return sacs_snprintf(dest, dest_size, &_type_name_##_sacs_snprintfer); \

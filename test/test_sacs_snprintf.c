@@ -31,22 +31,31 @@ static void test_cycle_sacs_snprintf_char(const char* expect_string, const char*
   char result_string[256] = {0};
   struct SacsStructFormat format = SACS_FORMAT_DEFAULT;  
 
-  puts(test_string);
   
   const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_snprintf_char, &test_struct, test_string);
-  assert(parse_result == strlen(test_string));  
+  assert(parse_result == strlen(test_string));    
+  
+  memset(result_string, 0, sizeof(result_string));
+  const size_t parsesnprintf_string_size = SACS_PARSESNPRINTF_TYPE( struct_test_sacs_snprintf_char, &test_struct, result_string, sizeof(result_string), &format, test_string);
+  
+  assert(parsesnprintf_string_size == strlen(expect_string));  
+  assert(0 == strcmp(expect_string, result_string));  
+  
+  
 
   const size_t result_string_size = SACS_SNPRINTF_TYPE(struct_test_sacs_snprintf_char, &test_struct, result_string, sizeof(result_string), &format);  
   assert(result_string_size == strlen(expect_string));  
   assert(0 == strcmp(expect_string, result_string));  
+  puts(result_string);
+
   
-
+  const struct SacsStructFormat pretty_format = SACS_FORMAT_PRETTY;    
   memset(result_string, 0, sizeof(result_string));
-  const size_t parsesnprintf_string_size = SACS_PARSESNPRINTF_TYPE( struct_test_sacs_snprintf_char, &test_struct, result_string, sizeof(result_string), &format, test_string);
-
-  assert(parsesnprintf_string_size == strlen(expect_string));  
-  assert(0 == strcmp(expect_string, result_string));
-
+  const size_t pretty_string_size = SACS_SNPRINTF_TYPE(struct_test_sacs_snprintf_char, &test_struct, result_string, sizeof(result_string), &pretty_format);  
+  
+  assert(pretty_string_size == strlen(result_string)); 
+  puts(result_string);
+  
   
   memset(result_string, 0, sizeof(result_string));
   const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_char, &test_struct, result_string, sizeof(result_string));
