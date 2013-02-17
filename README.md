@@ -55,6 +55,14 @@ SACS can also emit other formats, such as JSON.
 
 The Bad
 =======
+It doesn't work… yet.  Parts of the functionality are in place, along with the general framework for generating.
+
+> **If you are expecting to download this library and it "just work" you will be very dissapointed.**
+
+
+
+The Ugly
+=======
 The SACS framework is built using the C preprocessor.  
 Therefore, any problem with formatting when writing C code that uses SACS causes weird, hard to debug compiler messages.
 This problem may or may not improve in the future.  The code is freely available for examination.
