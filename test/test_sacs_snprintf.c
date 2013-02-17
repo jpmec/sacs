@@ -4,10 +4,15 @@
 
 
 
+
 #include "struct_test_sacs_snprintf_char.h"
 #include "struct_test_sacs_snprintf_chars.h"
+#include "struct_test_sacs_snprintf_double.h"
+#include "struct_test_sacs_snprintf_float.h"
 #include "struct_test_sacs_snprintf_int.h"
 #include "struct_test_sacs_snprintf_int_array.h"
+
+
 
 
 #include "../src/sacs_util.h"
@@ -97,6 +102,45 @@ static void test_cycle_sacs_snprintf_int_array(const char* expect_string, const 
   
   assert(0 == strcmp(expect_string, result_string));  
 }
+
+
+
+
+static void test_cycle_sacs_snprintf_float(const char* expect_string, const char* test_string)
+{
+  struct struct_test_sacs_snprintf_float test_struct = {0};
+  
+  const size_t snprintf_result = SACS_PARSE_TYPE(struct_test_sacs_snprintf_float, &test_struct, test_string);
+  assert(snprintf_result == strlen(test_string));
+  
+  char result_string[256] = {0};
+  struct SacsStructFormat format = SACS_FORMAT_DEFAULT;
+  
+  const size_t result_string_size = SACS_SNPRINTF_TYPE(struct_test_sacs_snprintf_float, &test_struct, result_string, sizeof(result_string), &format);  
+  assert(result_string_size == strlen(expect_string));
+  
+  assert(0 == strcmp(expect_string, result_string));  
+}
+
+
+
+
+static void test_cycle_sacs_snprintf_double(const char* expect_string, const char* test_string)
+{
+  struct struct_test_sacs_snprintf_double test_struct = {0};
+  
+  const size_t snprintf_result = SACS_PARSE_TYPE(struct_test_sacs_snprintf_double, &test_struct, test_string);
+  assert(snprintf_result == strlen(test_string));
+  
+  char result_string[256] = {0};
+  struct SacsStructFormat format = SACS_FORMAT_DEFAULT;
+  
+  const size_t result_string_size = SACS_SNPRINTF_TYPE(struct_test_sacs_snprintf_double, &test_struct, result_string, sizeof(result_string), &format);  
+  assert(result_string_size == strlen(expect_string));
+  
+  assert(0 == strcmp(expect_string, result_string));  
+}
+
 
 
 
@@ -242,6 +286,88 @@ static void test_sacs_snprintf_int_array(void)
 
 
 
+static void test_sacs_snprintf_float(void)
+{
+  printf("%s\n", __FUNCTION__);
+  
+  {
+    const char test_string[] = "{.value=0.000000,}"; 
+    
+    test_cycle_sacs_snprintf_float(test_string, test_string);
+  }
+  
+  
+  {
+    const char test_string[] = "{.value=1.000000,}"; 
+    
+    test_cycle_sacs_snprintf_float(test_string, test_string);
+  }  
+  
+  {
+    const char test_string[] = "{.value=-1.000000,}"; 
+    
+    test_cycle_sacs_snprintf_float(test_string, test_string);
+  }   
+  
+  
+  {
+    const char test_string[] = "{.value=12.345678,}"; 
+    
+    test_cycle_sacs_snprintf_float(test_string, test_string);
+  }    
+  
+
+  {
+    const char test_string[] = "{.value=12345678.000000,}"; 
+    
+    test_cycle_sacs_snprintf_float(test_string, test_string);
+  }    
+}
+
+
+
+
+static void test_sacs_snprintf_double(void)
+{
+  printf("%s\n", __FUNCTION__);
+  
+  {
+    const char test_string[] = "{.value=0.000000,}"; 
+    
+    test_cycle_sacs_snprintf_double(test_string, test_string);
+  }
+  
+  
+  {
+    const char test_string[] = "{.value=1.000000,}"; 
+    
+    test_cycle_sacs_snprintf_double(test_string, test_string);
+  }  
+  
+  {
+    const char test_string[] = "{.value=-1.000000,}"; 
+    
+    test_cycle_sacs_snprintf_double(test_string, test_string);
+  }   
+  
+  
+  {
+    const char test_string[] = "{.value=12.345678,}"; 
+    
+    test_cycle_sacs_snprintf_double(test_string, test_string);
+  }    
+  
+  
+  {
+    const char test_string[] = "{.value=12345678.000000,}"; 
+    
+    test_cycle_sacs_snprintf_double(test_string, test_string);
+  }    
+}
+
+
+
+
 void test_sacs_snprintf(void)
 {
   printf("%s\n", __FUNCTION__);
@@ -250,8 +376,12 @@ void test_sacs_snprintf(void)
   
 //  test_sacs_snprintf_chars();
   
+  test_sacs_snprintf_double();
   test_sacs_snprintf_int();
   test_sacs_snprintf_int_array();
+  
+  test_sacs_snprintf_float();
+  
   
 //  struct TestSacsStruct test_struct = {0};
 //
