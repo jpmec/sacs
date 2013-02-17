@@ -76,7 +76,11 @@ This problem may or may not improve in the future.  The code is freely available
 
 The FAQs
 ========
+**What version is the latest SACS library**
+SACS is not mature enough to have version numbers, try back later.
 
+**Should I use the SACS library in my important/expensive/critical application**
+NO!  Please look elsewhere.  SACS should only be used for applications that will be lovingly debugged from now until the foreseeable future, with the expectation it could break at any time.
 
 **SACS doesn't work with Microsoft Visual C++?**
 Microsoft Visual C++ does not support C99 features such as named designators.
