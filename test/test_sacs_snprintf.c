@@ -249,7 +249,7 @@ static void test_sacs_snprintf_char(void)
   
   // Test 'a'
   {
-    const char test_string[] = "{.value='a',}"; 
+    const char test_string[] = "{.value='a'}"; 
     
     test_cycle_sacs_snprintf_char(test_string, test_string);
   }  
@@ -257,7 +257,7 @@ static void test_sacs_snprintf_char(void)
   
   // Test '\0'
   {
-    const char test_string[] = "{.value='\\0',}"; 
+    const char test_string[] = "{.value='\\0'}"; 
 
     test_cycle_sacs_snprintf_char(test_string, test_string);    
   }
@@ -265,7 +265,7 @@ static void test_sacs_snprintf_char(void)
   
   // Test '\012'
   {
-    const char test_string[] = "{.value='\\012',}"; 
+    const char test_string[] = "{.value='\\012'}"; 
     
     test_cycle_sacs_snprintf_char(test_string, test_string);     
   }
@@ -273,7 +273,7 @@ static void test_sacs_snprintf_char(void)
   
   // Test '\321'
   {
-    const char test_string[] = "{.value='\\321',}"; 
+    const char test_string[] = "{.value='\\321'}"; 
     
     test_cycle_sacs_snprintf_char(test_string, test_string);     
   }
@@ -281,8 +281,8 @@ static void test_sacs_snprintf_char(void)
   
   // Test 1
   {
-    const char test_string[] = "{.value=1,}"; 
-    const char expect_string[] = "{.value='\\001',}";
+    const char test_string[] = "{.value=1}"; 
+    const char expect_string[] = "{.value='\\001'}";
     
     test_cycle_sacs_snprintf_char(expect_string, test_string);     
   }
@@ -297,7 +297,7 @@ static void test_sacs_snprintf_chars(void)
   
   // Test 'a'
   {
-    const char test_string[] = "{.value=\"Hello World\",}"; 
+    const char test_string[] = "{.value=\"Hello World\"}"; 
     
     test_cycle_sacs_snprintf_chars(test_string, test_string);
   }
@@ -311,31 +311,31 @@ static void test_sacs_snprintf_int(void)
   printf("%s\n", __FUNCTION__);
   
   {
-    const char test_string[] = "{.value=0,}"; 
+    const char test_string[] = "{.value=0}"; 
     
     test_cycle_sacs_snprintf_int(test_string, test_string);
   }
   
   {
-    const char test_string[] = "{.value=1,}"; 
+    const char test_string[] = "{.value=1}"; 
     
     test_cycle_sacs_snprintf_int(test_string, test_string);
   }
   
   {
-    const char test_string[] = "{.value=1234567890,}"; 
+    const char test_string[] = "{.value=1234567890}"; 
     
     test_cycle_sacs_snprintf_int(test_string, test_string);
   }  
 
   {
-    const char test_string[] = "{.value=-1,}"; 
+    const char test_string[] = "{.value=-1}"; 
     
     test_cycle_sacs_snprintf_int(test_string, test_string);
   }
   
   {
-    const char test_string[] = "{.value=-1234567890,}"; 
+    const char test_string[] = "{.value=-1234567890}"; 
     
     test_cycle_sacs_snprintf_int(test_string, test_string);
   }   
@@ -349,31 +349,31 @@ static void test_sacs_snprintf_int_array(void)
   printf("%s\n", __FUNCTION__);
   
   {
-    const char test_string[] = "{.value={0,0,0},}"; 
+    const char test_string[] = "{.value={0,0,0}}"; 
     
     test_cycle_sacs_snprintf_int_array(test_string, test_string);
   }
   
   {
-    const char test_string[] = "{.value={1,2,3},}"; 
+    const char test_string[] = "{.value={1,2,3}}"; 
     
     test_cycle_sacs_snprintf_int_array(test_string, test_string);
   }
   
   {
-    const char test_string[] = "{.value={1234567890,0,0},}"; 
+    const char test_string[] = "{.value={1234567890,0,0}}"; 
     
     test_cycle_sacs_snprintf_int_array(test_string, test_string);
   }  
   
   {
-    const char test_string[] = "{.value={-1,-2,-3},}"; 
+    const char test_string[] = "{.value={-1,-2,-3}}"; 
     
     test_cycle_sacs_snprintf_int_array(test_string, test_string);
   }
   
   {
-    const char test_string[] = "{.value={-1234567890,0,0},}"; 
+    const char test_string[] = "{.value={-1234567890,0,0}}"; 
     
     test_cycle_sacs_snprintf_int_array(test_string, test_string);
   }   
@@ -388,34 +388,34 @@ static void test_sacs_snprintf_float(void)
   printf("%s\n", __FUNCTION__);
   
   {
-    const char test_string[] = "{.value=0.000000,}"; 
+    const char test_string[] = "{.value=0.000000}"; 
     
     test_cycle_sacs_snprintf_float(test_string, test_string);
   }
   
   
   {
-    const char test_string[] = "{.value=1.000000,}"; 
+    const char test_string[] = "{.value=1.000000}"; 
     
     test_cycle_sacs_snprintf_float(test_string, test_string);
   }  
   
   {
-    const char test_string[] = "{.value=-1.000000,}"; 
+    const char test_string[] = "{.value=-1.000000}"; 
     
     test_cycle_sacs_snprintf_float(test_string, test_string);
   }   
   
   
   {
-    const char test_string[] = "{.value=12.345678,}"; 
+    const char test_string[] = "{.value=12.345678}"; 
     
     test_cycle_sacs_snprintf_float(test_string, test_string);
   }    
   
 
   {
-    const char test_string[] = "{.value=12345678.000000,}"; 
+    const char test_string[] = "{.value=12345678.000000}"; 
     
     test_cycle_sacs_snprintf_float(test_string, test_string);
   }    
@@ -429,34 +429,34 @@ static void test_sacs_snprintf_double(void)
   printf("%s\n", __FUNCTION__);
   
   {
-    const char test_string[] = "{.value=0.000000,}"; 
+    const char test_string[] = "{.value=0.000000}"; 
     
     test_cycle_sacs_snprintf_double(test_string, test_string);
   }
   
   
   {
-    const char test_string[] = "{.value=1.000000,}"; 
+    const char test_string[] = "{.value=1.000000}"; 
     
     test_cycle_sacs_snprintf_double(test_string, test_string);
   }  
   
   {
-    const char test_string[] = "{.value=-1.000000,}"; 
+    const char test_string[] = "{.value=-1.000000}"; 
     
     test_cycle_sacs_snprintf_double(test_string, test_string);
   }   
   
   
   {
-    const char test_string[] = "{.value=12.345678,}"; 
+    const char test_string[] = "{.value=12.345678}"; 
     
     test_cycle_sacs_snprintf_double(test_string, test_string);
   }    
   
   
   {
-    const char test_string[] = "{.value=12345678.000000,}"; 
+    const char test_string[] = "{.value=12345678.000000}"; 
     
     test_cycle_sacs_snprintf_double(test_string, test_string);
   }    

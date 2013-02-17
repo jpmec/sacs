@@ -155,11 +155,15 @@ size_t sacs_snprintf_partial(char* str, size_t str_size, struct SacsStructSnprin
   char* char_ptr = str;
   size_t count = 0;
   
-  const struct SacsFieldSnprintfer* field_printer = NULL;
+//  const struct SacsFieldSnprintfer* field_printer = NULL;
+  const struct SacsFieldSnprintfer* field_printer = printer->printers_array;
   
-  for (size_t i = 0; i < printer->printers_count; ++i)
+  size_t printers_count = printer->printers_count;
+  
+  //for (size_t i = 0; i < printer->printers_count; ++i)
+  do
   {
-    field_printer = &printer->printers_array[i];
+//    field_printer = &printer->printers_array[i];
     
     if (printer->format.flags.print_field_name)
     {
@@ -194,13 +198,19 @@ size_t sacs_snprintf_partial(char* str, size_t str_size, struct SacsStructSnprin
       str_size -= count;
     }    
     
-    if (printer->format.char_field_separator)
+    if (1 < printers_count)
     {
-      count = snprintf(char_ptr, str_size, "%c", printer->format.char_field_separator);
-      char_ptr += count;
-      str_size -= count;
+      if (printer->format.char_field_separator)
+      {
+        count = snprintf(char_ptr, str_size, "%c", printer->format.char_field_separator);
+        char_ptr += count;
+        str_size -= count;
+      }
     }
-  }
+    
+    ++field_printer;
+    --printers_count;
+  } while (printers_count);
   
   return char_ptr - str;
 }
