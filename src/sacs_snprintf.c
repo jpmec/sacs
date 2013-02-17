@@ -89,11 +89,14 @@ size_t sacs_snprintf_array(struct SacsStructSnprintfer* printer, char* str, size
       str_size -= count;      
     }    
     
-    if (printer->format.char_field_separator)
+    if (array_count > 1)
     {
-      *str = printer->format.char_field_separator;
-      ++str;
-      --str_size;
+      if (printer->format.char_field_separator)
+      {
+        *str = printer->format.char_field_separator;
+        ++str;
+        --str_size;
+      }
     }
     
   } while (--array_count);
@@ -271,15 +274,43 @@ size_t sacs_snprintf_char(struct SacsStructSnprintfer* printer, char* str, size_
   
   const char* char_value = (const char*) value;
   
-  char c = * char_value;
-  
+  char c = *char_value;
+
   if ('\0' == c)
   {
     return snprintf(str, str_size, "\'\\0\'");    
   }
   else if (isgraph(c))
   {
-    return snprintf(str, str_size, "'%c'", c);
+    char* char_ptr = str;
+    
+    if (printer->format.char_char_begin)
+    {
+      *char_ptr = printer->format.char_char_begin;
+      ++char_ptr;
+      --str_size;
+      if (0 == str_size)
+      {
+        return 0;
+      }
+    }
+    
+    size_t count = snprintf(char_ptr, str_size, "%c", c);
+    char_ptr += count;
+    str_size -= count;
+    
+    if (printer->format.char_char_end)
+    {
+      *char_ptr = printer->format.char_char_end;
+      ++char_ptr;
+      --str_size;
+      if (0 == str_size)
+      {
+        return 0;
+      }
+    }
+    
+    return char_ptr - str;  
   }
   else
   {

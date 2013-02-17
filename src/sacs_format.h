@@ -46,6 +46,8 @@
     .char_struct_end = SACS_CHAR_STRUCT_END, \
     .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
     .char_array_end = SACS_CHAR_ARRAY_END, \
+    .char_char_begin = SACS_CHAR_CHAR_BEGIN, \
+    .char_char_end = SACS_CHAR_CHAR_END, \
     .flags = { \
       .print_field_name = 1, \
     } \
@@ -72,6 +74,8 @@
     .char_struct_end = SACS_CHAR_STRUCT_END, \
     .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
     .char_array_end = SACS_CHAR_ARRAY_END, \
+    .char_char_begin = SACS_CHAR_CHAR_BEGIN, \
+    .char_char_end = SACS_CHAR_CHAR_END, \
     .flags = { \
       .print_field_name = 0, \
     } \
@@ -98,6 +102,8 @@
     .char_struct_end = SACS_CHAR_STRUCT_END, \
     .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
     .char_array_end = SACS_CHAR_ARRAY_END, \
+    .char_char_begin = SACS_CHAR_CHAR_BEGIN, \
+    .char_char_end = SACS_CHAR_CHAR_END, \
     .flags = { \
       .print_field_name = 1, \
     } \
@@ -139,6 +145,8 @@ struct SacsStructFormat
   char char_struct_end; 
   char char_array_begin;
   char char_array_end;
+  char char_char_begin;
+  char char_char_end;
   
   int indent_space_count;  ///< Number of spaces for each indent level.
   

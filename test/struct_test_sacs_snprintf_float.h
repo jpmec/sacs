@@ -21,5 +21,11 @@
 #include "../src/sacs_snprintfable.h"
 #include "struct_test_sacs_snprintf_float.sac"
 
+#include "../src/sacs_jsonable.h"
+#include "struct_test_sacs_snprintf_float.sac"
+
+#include "../src/sacs_xmlable.h"
+#include "struct_test_sacs_snprintf_float.sac"
+
 
 #endif

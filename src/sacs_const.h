@@ -33,6 +33,8 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 #define SACS_CHAR_DOUBLE_QUOTE             '"'
 #define SACS_CHAR_LEFT_BRACE               '{'
 #define SACS_CHAR_RIGHT_BRACE              '}'
+#define SACS_CHAR_LEFT_BRACKET             '['
+#define SACS_CHAR_RIGHT_BRACKET            ']'
 #define SACS_CHAR_DOT                      '.'
 #define SACS_CHAR_EQUALS                   '='
 #define SACS_CHAR_BACKSLASH                '\\'
