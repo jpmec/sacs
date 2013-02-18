@@ -33,6 +33,52 @@
 
 
 
+static size_t sacs_xml_snprintf_field_name(struct SacsStructSnprintfer* printer, char* str, size_t str_size, const char* field_name)
+{
+  assert(printer);
+  assert(str);
+  assert(str_size);
+  assert(field_name);
+  
+  char* char_ptr = str;
+  
+  if (printer->format.str_before_field_name)
+  {
+    const size_t count = snprintf(char_ptr, str_size, SACS_XML_STR_BEFORE_FIELD_NAME_AFTER_VALUE);    
+    char_ptr += count;
+    str_size -= count;
+  }
+  
+  
+  const size_t count = snprintf(char_ptr, str_size, "%s", field_name);
+  char_ptr += count;
+  str_size -= count;
+  
+  
+  if (printer->format.str_after_field_name)
+  {
+    const size_t count = snprintf(char_ptr, str_size, SACS_XML_STR_AFTER_FIELD_NAME);    
+    char_ptr += count;
+    str_size -= count;
+  }
+  
+  return char_ptr - str;
+}
+
+
+
+
+size_t sacs_xml_snprintf_field_name_after_value(struct SacsStructSnprintfer* printer, char* str, size_t str_size, const struct SacsFieldValueSnprintfer* field_printer)
+{
+  assert(printer);
+  assert(str);
+  assert(str_size);
+  assert(field_printer);
+  
+  return sacs_xml_snprintf_field_name(printer, str, str_size, field_printer->name);  
+}
+
+
 
 
 size_t sacs_ctoxml(char* dest, size_t dest_size, const char* src, size_t src_size)

@@ -248,7 +248,6 @@ size_t sacs_snprintf_partial(char* str, size_t str_size, struct SacsStructSnprin
   
   do
   {
-    
     if (printer->format.flags.print_field_name_before_value)
     {
       count = printer->print_field_name_before_value(printer, char_ptr, str_size, field_printer);
@@ -276,6 +275,7 @@ size_t sacs_snprintf_partial(char* str, size_t str_size, struct SacsStructSnprin
       char_ptr += count;
       str_size -= count;
     }    
+    
     
     if (1 < printers_count)
     {

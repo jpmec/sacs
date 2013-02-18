@@ -37,6 +37,7 @@
 #define SACS_XML_CHAR_ARRAY_END      ']'
 
 #define SACS_XML_STR_BEFORE_FIELD_NAME    "<"
+#define SACS_XML_STR_BEFORE_FIELD_NAME_AFTER_VALUE    "</"
 #define SACS_XML_STR_AFTER_FIELD_NAME     ">"
 
 
@@ -51,6 +52,7 @@
   size_t _type_name_##_sacs_snprintf_as_xml(struct SacsStructSnprintfer* printer, char* dest, size_t dest_size, const void* value, size_t value_size) \
   { \
     SACS_SNPRINTFER(_type_name_, value); \
+    _type_name_##_sacs_snprintfer.print_field_name_after_value = sacs_xml_snprintf_field_name_after_value; \
     _type_name_##_sacs_snprintfer.format = (struct SacsStructFormat) { \
       .str_before_field_name = SACS_XML_STR_BEFORE_FIELD_NAME, \
       .str_after_field_name = SACS_XML_STR_AFTER_FIELD_NAME, \
@@ -79,6 +81,9 @@
 #define SACS_SNPRINTF_TYPE_AS_XML(_type_name_, _src_, _dest_, _dest_size_) \
   _type_name_##_sacs_snprintf_type_as_xml(_dest_, _dest_size_, _src_, sizeof(struct _type_name_))
 
+
+
+size_t sacs_xml_snprintf_field_name_after_value(struct SacsStructSnprintfer* printer, char* str, size_t str_size, const struct SacsFieldValueSnprintfer* field_printer);
 
 
 
