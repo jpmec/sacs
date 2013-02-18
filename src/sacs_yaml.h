@@ -54,12 +54,8 @@
 
 
 
-#define SACS_YAMLABLE(_type_name_) \
-  size_t _type_name_##_sacs_snprintf_as_yaml(struct SacsStructSnprintfer* printer, char* dest, size_t dest_size, const void* value, size_t value_size); \
-  size_t _type_name_##_sacs_snprintf_as_yaml(struct SacsStructSnprintfer* printer, char* dest, size_t dest_size, const void* value, size_t value_size) \
-  { \
-  SACS_SNPRINTFER(_type_name_, value); \
-  _type_name_##_sacs_snprintfer.format = (struct SacsStructFormat) { \
+#define SACS_YAML_DEFAULT_FORMAT \
+  (struct SacsStructFormat) { \
     .str_before_field_name = SACS_YAML_STR_BEFORE_FIELD_NAME, \
     .str_after_field_name = SACS_YAML_STR_AFTER_FIELD_NAME, \
     .str_before_field_value = SACS_YAML_STR_BEFORE_FIELD_VALUE, \
@@ -79,7 +75,17 @@
     .flags = { \
       .print_field_name_before_value = 1, \
     } \
-  }; \
+  }
+
+
+
+
+#define SACS_YAMLABLE(_type_name_) \
+  size_t _type_name_##_sacs_snprintf_as_yaml(struct SacsStructSnprintfer* printer, char* dest, size_t dest_size, const void* value, size_t value_size); \
+  size_t _type_name_##_sacs_snprintf_as_yaml(struct SacsStructSnprintfer* printer, char* dest, size_t dest_size, const void* value, size_t value_size) \
+  { \
+    SACS_SNPRINTFER(_type_name_, value); \
+    _type_name_##_sacs_snprintfer.format = SACS_YAML_DEFAULT_FORMAT; \
     return sacs_snprintf(dest, dest_size, &_type_name_##_sacs_snprintfer); \
   } \
   size_t _type_name_##_sacs_snprintf_type_as_yaml(char* dest, size_t dest_size, const void* value, size_t value_size); \

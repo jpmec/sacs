@@ -46,6 +46,24 @@
 
 
 
+#define SACS_XML_FORMAT_DEFAULT \
+  (struct SacsStructFormat) { \
+    .str_before_field_name = SACS_XML_STR_BEFORE_FIELD_NAME, \
+    .str_after_field_name = SACS_XML_STR_AFTER_FIELD_NAME, \
+    .char_field_value_separator = SACS_XML_CHAR_FIELD_VALUE_SEPARATOR, \
+    .char_field_separator = SACS_XML_CHAR_FIELD_SEPARATOR, \
+    .char_struct_begin = SACS_XML_CHAR_STRUCT_BEGIN, \
+    .char_struct_end = SACS_XML_CHAR_STRUCT_END, \
+    .char_array_begin = SACS_XML_CHAR_ARRAY_BEGIN, \
+    .char_array_end = SACS_XML_CHAR_ARRAY_END, \
+    .flags = { \
+      .print_field_name_before_value = 1, \
+      .print_field_name_after_value = 1, \
+    } \
+  }
+
+
+
 
 #define SACS_XMLABLE(_type_name_) \
   size_t _type_name_##_sacs_snprintf_as_xml(struct SacsStructSnprintfer* printer, char* dest, size_t dest_size, const void* value, size_t value_size); \
@@ -53,20 +71,7 @@
   { \
     SACS_SNPRINTFER(_type_name_, value); \
     _type_name_##_sacs_snprintfer.print_field_name_after_value = sacs_xml_snprintf_field_name_after_value; \
-    _type_name_##_sacs_snprintfer.format = (struct SacsStructFormat) { \
-      .str_before_field_name = SACS_XML_STR_BEFORE_FIELD_NAME, \
-      .str_after_field_name = SACS_XML_STR_AFTER_FIELD_NAME, \
-      .char_field_value_separator = SACS_XML_CHAR_FIELD_VALUE_SEPARATOR, \
-      .char_field_separator = SACS_XML_CHAR_FIELD_SEPARATOR, \
-      .char_struct_begin = SACS_XML_CHAR_STRUCT_BEGIN, \
-      .char_struct_end = SACS_XML_CHAR_STRUCT_END, \
-      .char_array_begin = SACS_XML_CHAR_ARRAY_BEGIN, \
-      .char_array_end = SACS_XML_CHAR_ARRAY_END, \
-      .flags = { \
-        .print_field_name_before_value = 1, \
-        .print_field_name_after_value = 1, \
-      } \
-    }; \
+    _type_name_##_sacs_snprintfer.format = SACS_XML_FORMAT_DEFAULT; \
     return sacs_snprintf(dest, dest_size, &_type_name_##_sacs_snprintfer); \
   } \
   size_t _type_name_##_sacs_snprintf_type_as_xml(char* dest, size_t dest_size, const void* value, size_t value_size); \
