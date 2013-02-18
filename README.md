@@ -82,6 +82,7 @@ The FAQs
 A simple structured data parser and emitter has emerged as a need for simple systems written in C.  Today, most of these simple systems interact with other more complex systems, thus the ability to communicate easily with these systems is needed.  For example see the links below:
 
 * http://stackoverflow.com/questions/842169/xml-to-c-struct-and-c-struct-to-xml
+* http://stackoverflow.com/questions/2685333/mapping-c-structure-to-an-xml-element
 
 
 **What version is the latest SACS library?**
