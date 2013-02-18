@@ -150,86 +150,6 @@
 
 
 
-// TODO REMOVE THESE FORMATS AND USE sacs_format.h
-#define SACS_FPRINTF_FORMAT_DEFAULT \
-  { \
-    .str_before_field_name = SACS_STR_BEFORE_FIELD_NAME, \
-    .str_after_field_name = SACS_STR_AFTER_FIELD_NAME, \
-    .str_before_field_value = SACS_STR_BEFORE_FIELD_VALUE, \
-    .str_after_field_value = SACS_STR_AFTER_FIELD_VALUE, \
-    .str_before_field = SACS_STR_BEFORE_FIELD, \
-    .str_after_field = SACS_STR_AFTER_FIELD, \
-    .str_before_array_field = SACS_STR_BEFORE_ARRAY_FIELD, \
-    .str_after_array_field = SACS_STR_AFTER_ARRAY_FIELD, \
-    .str_field_name_value_separator = SACS_STR_FIELD_VALUE_SEPARATOR, \
-    .str_uint8_format = SACS_STR_UINT8_FORMAT, \
-    .str_uint16_format = SACS_STR_UINT16_FORMAT, \
-    .str_uint32_format = SACS_STR_UINT32_FORMAT, \
-    .char_field_value_separator = SACS_CHAR_FIELD_VALUE_SEPARATOR, \
-    .char_field_separator = SACS_CHAR_FIELD_SEPARATOR, \
-    .char_struct_begin = SACS_CHAR_STRUCT_BEGIN, \
-    .char_struct_end = SACS_CHAR_STRUCT_END, \
-    .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
-    .char_array_end = SACS_CHAR_ARRAY_END, \
-    .flags = { \
-      .print_field_name_before_value = 1, \
-    } \
-  }
-
-
-
-
-#define SACS_FPRINTF_FORMAT_C89 \
-  { \
-    .str_before_field_name = SACS_STR_BEFORE_FIELD_NAME, \
-    .str_after_field_name = SACS_STR_AFTER_FIELD_NAME, \
-    .str_before_field = SACS_STR_BEFORE_FIELD, \
-    .str_after_field = SACS_STR_AFTER_FIELD, \
-    .str_before_array_field = SACS_STR_BEFORE_ARRAY_FIELD, \
-    .str_after_array_field = SACS_STR_AFTER_ARRAY_FIELD, \
-    .str_field_name_value_separator = SACS_STR_FIELD_VALUE_SEPARATOR, \
-    .str_uint8_format = SACS_STR_UINT8_FORMAT, \
-    .str_uint16_format = SACS_STR_UINT16_FORMAT, \
-    .str_uint32_format = SACS_STR_UINT32_FORMAT, \
-    .char_field_value_separator = SACS_CHAR_FIELD_VALUE_SEPARATOR, \
-    .char_field_separator = SACS_CHAR_FIELD_SEPARATOR, \
-    .char_struct_begin = SACS_CHAR_STRUCT_BEGIN, \
-    .char_struct_end = SACS_CHAR_STRUCT_END, \
-    .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
-    .char_array_end = SACS_CHAR_ARRAY_END, \
-    .flags = { \
-      .print_field_name_before_value = 0, \
-    } \
-  }
-
-
-
-
-#define SACS_FPRINTF_FORMAT_PRETTY \
-  { \
-    .str_before_field_name = SACS_STR_BEFORE_FIELD_NAME_PRETTY, \
-    .str_after_field_name = SACS_STR_AFTER_FIELD_NAME_PRETTY, \
-    .str_before_field = SACS_STR_BEFORE_FIELD_PRETTY, \
-    .str_after_field = SACS_STR_AFTER_FIELD_PRETTY, \
-    .str_before_array_field = SACS_STR_BEFORE_ARRAY_FIELD_PRETTY, \
-    .str_after_array_field = SACS_STR_AFTER_ARRAY_FIELD_PRETTY, \
-    .str_field_name_value_separator = SACS_STR_FIELD_VALUE_SEPARATOR_PRETTY, \
-    .str_uint8_format = SACS_STR_UINT8_FORMAT, \
-    .str_uint16_format = SACS_STR_UINT16_FORMAT, \
-    .str_uint32_format = SACS_STR_UINT32_FORMAT, \
-    .char_field_value_separator = SACS_CHAR_FIELD_VALUE_SEPARATOR, \
-    .char_field_separator = SACS_CHAR_FIELD_SEPARATOR, \
-    .char_struct_begin = SACS_CHAR_STRUCT_BEGIN, \
-    .char_struct_end = SACS_CHAR_STRUCT_END, \
-    .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
-    .char_array_end = SACS_CHAR_ARRAY_END, \
-    .flags = { \
-      .print_field_name_before_value = 1, \
-    } \
-  }
-
-
-
 
 #define SACS_FPRINTFER(_type_name_, _src_) \
   struct SacsStructFprintfer _type_name_##_sacs_fprintfer = \
@@ -239,7 +159,7 @@
     .src_size = sizeof(struct _type_name_), \
     .printers_array = _type_name_##_sacs_field_fprintfers, \
     .printers_count = (sizeof(_type_name_##_sacs_field_fprintfers) / sizeof(struct SacsFieldFprintfer)), \
-    .format = SACS_FPRINTF_FORMAT_DEFAULT, \
+    .format = SACS_FORMAT_DEFAULT, \
   };
 
 
@@ -294,54 +214,6 @@ struct SacsFieldFprintfer
   SacsFprintfFieldCallback_t function;
   size_t field_size;
 };
-
-
-
-
-//struct SacsStructFprintfFormatFlags
-//{
-//  unsigned print_field_name : 1;
-//  unsigned print_hex_prefix : 1;
-//};
-
-
-
-
-//struct SacsStructFprintfFormat
-//{
-//  const char* str_before_field_name;
-//  const char* str_after_field_name;
-//  const char* str_before_field_value;
-//  const char* str_after_field_value;  
-//  const char* str_before_field;
-//  const char* str_after_field;
-//  const char* str_before_array_field;
-//  const char* str_after_array_field;   
-//  const char* str_field_name_value_separator;
-//  
-//  const char* str_uint8_format;  
-//  const char* str_uint16_format;  
-//  const char* str_uint32_format;
-//  
-//  char char_field_value_separator;
-//  char char_field_separator;
-//  char char_struct_begin;
-//  char char_struct_end; 
-//  char char_array_begin;
-//  char char_array_end;
-//  
-//  int indent_space_count;  ///< Number of spaces for each indent level.
-//  
-//  struct SacsStructFprintfFormatFlags flags;
-//};
-
-
-
-
-//struct SacsStructFprintfState
-//{
-//  int indent;  ///< Number of indentions
-//};
 
 
 

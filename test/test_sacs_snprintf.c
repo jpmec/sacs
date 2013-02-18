@@ -49,7 +49,7 @@ static void test_cycle_sacs_snprintf_char(const char* expect_string, const char*
   puts(result_string);
 
   
-  const struct SacsStructFormat pretty_format = SACS_FORMAT_PRETTY;    
+  struct SacsStructFormat pretty_format = SACS_FORMAT_PRETTY;    
   memset(result_string, 0, sizeof(result_string));
   const size_t pretty_string_size = SACS_SNPRINTF_TYPE(struct_test_sacs_snprintf_char, &test_struct, result_string, sizeof(result_string), &pretty_format);  
   

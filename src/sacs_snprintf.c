@@ -149,12 +149,12 @@ static size_t sacs_snprintf_field_name(struct SacsStructSnprintfer* printer, cha
 
 
 
-static size_t sacs_snprintf_field_value(struct SacsStructSnprintfer* printer, char* str, size_t str_size, const struct SacsFieldSnprintfer* field_printer)
+size_t sacs_snprintf_field_value(struct SacsStructSnprintfer* printer, char* str, size_t str_size, const struct SacsFieldValueSnprintfer* field_value_printer)
 {
   assert(printer);
   assert(str);
   assert(str_size);
-  assert(field_printer);
+  assert(field_value_printer);
 
   char* char_ptr = str;
   
@@ -165,8 +165,8 @@ static size_t sacs_snprintf_field_value(struct SacsStructSnprintfer* printer, ch
     str_size -= count;
   }
   
-  const void* src = printer->src + field_printer->field_offset;
-  size_t count = field_printer->function(printer, char_ptr, str_size, src, field_printer->field_size);
+  const void* src = printer->src + field_value_printer->field_offset;
+  size_t count = field_value_printer->function(printer, char_ptr, str_size, src, field_value_printer->field_size);
   char_ptr += count;
   str_size -= count;
   
@@ -183,6 +183,56 @@ static size_t sacs_snprintf_field_value(struct SacsStructSnprintfer* printer, ch
 
 
 
+size_t sacs_snprintf_field_name_before_value(struct SacsStructSnprintfer* printer, char* str, size_t str_size, const struct SacsFieldValueSnprintfer* field_printer)
+{
+  assert(printer);
+  assert(str);
+  assert(str_size);
+  assert(field_printer);
+  
+  return sacs_snprintf_field_name(printer, str, str_size, field_printer->name);  
+}
+
+
+
+
+size_t sacs_snprintf_field_name_value_separator(struct SacsStructSnprintfer* printer, char* str, size_t str_size)
+{
+  assert(printer);
+  assert(str);
+  assert(str_size);
+  
+  return snprintf(str, str_size, "%s", printer->format.str_field_name_value_separator);  
+}
+
+
+
+
+size_t sacs_snprintf_field_name_after_value(struct SacsStructSnprintfer* printer, char* str, size_t str_size, const struct SacsFieldValueSnprintfer* field_printer)
+{
+  assert(printer);
+  assert(str);
+  assert(str_size);
+  assert(field_printer);
+  
+  return sacs_snprintf_field_name(printer, str, str_size, field_printer->name);  
+}
+
+
+
+
+size_t sacs_snprintf_field_separator(struct SacsStructSnprintfer* printer, char* str, size_t str_size)
+{
+  assert(printer);
+  assert(str);
+  assert(str_size);
+  
+  return snprintf(str, str_size, "%c", printer->format.char_field_separator);  
+}
+
+
+
+
 size_t sacs_snprintf_partial(char* str, size_t str_size, struct SacsStructSnprintfer* printer)
 {
   assert(printer);
@@ -192,35 +242,37 @@ size_t sacs_snprintf_partial(char* str, size_t str_size, struct SacsStructSnprin
   char* char_ptr = str;
   size_t count = 0;
   
-  const struct SacsFieldSnprintfer* field_printer = printer->printers_array;
+  const struct SacsFieldValueSnprintfer* field_printer = printer->printers_array;
   
   size_t printers_count = printer->printers_count;
   
   do
   {
+    
     if (printer->format.flags.print_field_name_before_value)
     {
-      count = sacs_snprintf_field_name(printer, char_ptr, str_size, field_printer->name);
+      count = printer->print_field_name_before_value(printer, char_ptr, str_size, field_printer);
       char_ptr += count;
       str_size -= count;
     
+      
       if (printer->format.str_field_name_value_separator)
       {
-        count = snprintf(char_ptr, str_size, "%s", printer->format.str_field_name_value_separator);
+        count = printer->print_field_name_value_separator(printer, char_ptr, str_size);
         char_ptr += count;
         str_size -= count;
       }
     }
     
     
-    count = sacs_snprintf_field_value(printer, char_ptr, str_size, field_printer);
+    count = printer->print_field_value(printer, char_ptr, str_size, field_printer);
     char_ptr += count;
     str_size -= count;
 
     
     if (printer->format.flags.print_field_name_after_value)
     {
-      count = sacs_snprintf_field_name(printer, char_ptr, str_size, field_printer->name);
+      count = printer->print_field_name_after_value(printer, char_ptr, str_size, field_printer);
       char_ptr += count;
       str_size -= count;
     }    
@@ -229,7 +281,7 @@ size_t sacs_snprintf_partial(char* str, size_t str_size, struct SacsStructSnprin
     {
       if (printer->format.char_field_separator)
       {
-        count = snprintf(char_ptr, str_size, "%c", printer->format.char_field_separator);
+        count = printer->print_field_separator(printer, char_ptr, str_size);
         char_ptr += count;
         str_size -= count;
       }

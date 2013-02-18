@@ -142,92 +142,13 @@ SACS_SNPRINTF_FIELD(_type_name_, _field_name_, sacs_snprintf_enum, sizeof(enum _
 
 
 #define SACS_FIELD_SNPRINTFER_ARRAY(_type_name_) \
-  const struct SacsFieldSnprintfer _type_name_##_sacs_field_snprintfers[] =
+  const struct SacsFieldValueSnprintfer _type_name_##_sacs_field_snprintfers[] =
 
 
 #define SACS_SNPRINTFABLE_STRUCT(_type_name_) \
   SACS_FIELD_SNPRINTFER_ARRAY(_type_name_)
 
-//
-//
-//
-//#define SACS_SNPRINTF_FORMAT_DEFAULT \
-//  { \
-//    .str_before_field_name = SACS_STR_BEFORE_FIELD_NAME, \
-//    .str_after_field_name = SACS_STR_AFTER_FIELD_NAME, \
-//    .str_before_field_value = SACS_STR_BEFORE_FIELD_VALUE, \
-//    .str_after_field_value = SACS_STR_AFTER_FIELD_VALUE, \
-//    .str_before_field = SACS_STR_BEFORE_FIELD, \
-//    .str_after_field = SACS_STR_AFTER_FIELD, \
-//    .str_before_array_field = SACS_STR_BEFORE_ARRAY_FIELD, \
-//    .str_after_array_field = SACS_STR_AFTER_ARRAY_FIELD, \
-//    .str_field_name_value_separator = SACS_STR_FIELD_VALUE_SEPARATOR, \
-//    .str_uint8_format = SACS_STR_UINT8_FORMAT, \
-//    .str_uint16_format = SACS_STR_UINT16_FORMAT, \
-//    .str_uint32_format = SACS_STR_UINT32_FORMAT, \
-//    .char_field_value_separator = SACS_CHAR_FIELD_VALUE_SEPARATOR, \
-//    .char_field_separator = SACS_CHAR_FIELD_SEPARATOR, \
-//    .char_struct_begin = SACS_CHAR_STRUCT_BEGIN, \
-//    .char_struct_end = SACS_CHAR_STRUCT_END, \
-//    .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
-//    .char_array_end = SACS_CHAR_ARRAY_END, \
-//    .flags = { \
-//      .print_field_name = 1, \
-//    } \
-//  }
-//
-//
-//
-//
-//#define SACS_SNPRINTF_FORMAT_C89 \
-//  { \
-//    .str_before_field_name = SACS_STR_BEFORE_FIELD_NAME, \
-//    .str_after_field_name = SACS_STR_AFTER_FIELD_NAME, \
-//    .str_before_field = SACS_STR_BEFORE_FIELD, \
-//    .str_after_field = SACS_STR_AFTER_FIELD, \
-//    .str_before_array_field = SACS_STR_BEFORE_ARRAY_FIELD, \
-//    .str_after_array_field = SACS_STR_AFTER_ARRAY_FIELD, \
-//    .str_field_name_value_separator = SACS_STR_FIELD_VALUE_SEPARATOR, \
-//    .str_uint8_format = SACS_STR_UINT8_FORMAT, \
-//    .str_uint16_format = SACS_STR_UINT16_FORMAT, \
-//    .str_uint32_format = SACS_STR_UINT32_FORMAT, \
-//    .char_field_value_separator = SACS_CHAR_FIELD_VALUE_SEPARATOR, \
-//    .char_field_separator = SACS_CHAR_FIELD_SEPARATOR, \
-//    .char_struct_begin = SACS_CHAR_STRUCT_BEGIN, \
-//    .char_struct_end = SACS_CHAR_STRUCT_END, \
-//    .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
-//    .char_array_end = SACS_CHAR_ARRAY_END, \
-//    .flags = { \
-//      .print_field_name = 0, \
-//    } \
-//  }
-//
-//
-//
-//
-//#define SACS_SNPRINTF_FORMAT_PRETTY \
-//  { \
-//    .str_before_field_name = SACS_STR_BEFORE_FIELD_NAME_PRETTY, \
-//    .str_after_field_name = SACS_STR_AFTER_FIELD_NAME_PRETTY, \
-//    .str_before_field = SACS_STR_BEFORE_FIELD_PRETTY, \
-//    .str_after_field = SACS_STR_AFTER_FIELD_PRETTY, \
-//    .str_before_array_field = SACS_STR_BEFORE_ARRAY_FIELD_PRETTY, \
-//    .str_after_array_field = SACS_STR_AFTER_ARRAY_FIELD_PRETTY, \
-//    .str_field_name_value_separator = SACS_STR_FIELD_VALUE_SEPARATOR_PRETTY, \
-//    .str_uint8_format = SACS_STR_UINT8_FORMAT, \
-//    .str_uint16_format = SACS_STR_UINT16_FORMAT, \
-//    .str_uint32_format = SACS_STR_UINT32_FORMAT, \
-//    .char_field_value_separator = SACS_CHAR_FIELD_VALUE_SEPARATOR, \
-//    .char_field_separator = SACS_CHAR_FIELD_SEPARATOR, \
-//    .char_struct_begin = SACS_CHAR_STRUCT_BEGIN, \
-//    .char_struct_end = SACS_CHAR_STRUCT_END, \
-//    .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
-//    .char_array_end = SACS_CHAR_ARRAY_END, \
-//    .flags = { \
-//      .print_field_name = 1, \
-//    } \
-//  }
-//
+
 
 
 
@@ -238,8 +159,13 @@ SACS_SNPRINTF_FIELD(_type_name_, _field_name_, sacs_snprintf_enum, sizeof(enum _
     .src = _src_, \
     .src_size = sizeof(struct _type_name_), \
     .printers_array = _type_name_##_sacs_field_snprintfers, \
-    .printers_count = (sizeof(_type_name_##_sacs_field_snprintfers) / sizeof(struct SacsFieldSnprintfer)), \
+    .printers_count = (sizeof(_type_name_##_sacs_field_snprintfers) / sizeof(struct SacsFieldValueSnprintfer)), \
     .format = SACS_FORMAT_DEFAULT, \
+    .print_field_name_before_value = sacs_snprintf_field_name_before_value , \
+    .print_field_name_value_separator = sacs_snprintf_field_name_value_separator, \
+    .print_field_value = sacs_snprintf_field_value, \
+    .print_field_name_after_value = sacs_snprintf_field_name_after_value, \
+    .print_field_separator = sacs_snprintf_field_separator, \
   };
 
 
@@ -287,7 +213,7 @@ struct SacsFieldSnprintfer;
 typedef size_t (*SacsSnprintfFieldCallback_t)(struct SacsStructSnprintfer* printer, char* str, size_t str_size, const void* value, size_t value_size);
 
 
-struct SacsFieldSnprintfer
+struct SacsFieldValueSnprintfer
 {
   size_t field_offset;
   const char* name;
@@ -298,68 +224,24 @@ struct SacsFieldSnprintfer
 
 
 
-//struct SacsStructSnprintfFormatFlags
-//{
-//  unsigned print_field_name : 1;
-//  unsigned print_hex_prefix : 1;
-//};
-//
-//
-//
-//
-//struct SacsStructSnprintfFormat
-//{
-//  const char* str_before_field_name;
-//  const char* str_after_field_name;
-//  const char* str_before_field_value;
-//  const char* str_after_field_value;  
-//  const char* str_before_field;
-//  const char* str_after_field;
-//  const char* str_before_array_field;
-//  const char* str_after_array_field;   
-//  const char* str_field_name_value_separator;
-//
-//  const char* str_uint8_format;  
-//  const char* str_uint16_format;  
-//  const char* str_uint32_format;
-//  
-//  char char_field_value_separator;
-//  char char_field_separator;
-//  char char_struct_begin;
-//  char char_struct_end; 
-//  char char_array_begin;
-//  char char_array_end;
-//  
-//  int indent_space_count;  ///< Number of spaces for each indent level.
-//  
-//  struct SacsStructSnprintfFormatFlags flags;
-//};
-//
-//
-//
-//
-//struct SacsStructSnprintfState
-//{
-//  int indent;  ///< Number of indentions
-//};
-
-
-
-
 struct SacsStructSnprintfer
 {
   const char* name;
-  const struct SacsFieldSnprintfer* printers_array;  ///< Pointer to an array of printers.
-  size_t printers_count;                             ///< Number of elements in the array of printers.
+  const struct SacsFieldValueSnprintfer* printers_array;  ///< Pointer to an array of printers.
+  size_t printers_count;                                  ///< Number of elements in the array of printers.
 	
   const void* src;
   size_t src_size;
   
+  size_t (*print_field_name_before_value)(struct SacsStructSnprintfer* printer, char* str, size_t str_size, const struct SacsFieldValueSnprintfer* field_printer);
+  size_t (*print_field_name_value_separator)(struct SacsStructSnprintfer* printer, char* str, size_t str_size);
+  size_t (*print_field_value)(struct SacsStructSnprintfer* printer, char* str, size_t str_size, const struct SacsFieldValueSnprintfer* field_printer);
+  size_t (*print_field_name_after_value)(struct SacsStructSnprintfer* printer, char* str, size_t str_size, const struct SacsFieldValueSnprintfer* field_printer);
+  size_t (*print_field_separator)(struct SacsStructSnprintfer* printer, char* str, size_t str_size);
+  
   struct SacsStructFormat format;
   struct SacsStructFormatState state;
 };
-
-
 
 
 
@@ -378,6 +260,15 @@ size_t sacs_snprintf_partial(char* str, size_t str_size, struct SacsStructSnprin
 /** Function to iterate over all elements in a string, calling the print function for each.
  */
 size_t sacs_snprintf_array(struct SacsStructSnprintfer*, char* str, size_t str_size, const void* value, size_t value_size, size_t element_size, SacsSnprintfFieldCallback_t snprintf_function);
+
+
+
+size_t sacs_snprintf_field_name_before_value(struct SacsStructSnprintfer* printer, char* str, size_t str_size, const struct SacsFieldValueSnprintfer* field_printer);
+size_t sacs_snprintf_field_name_value_separator(struct SacsStructSnprintfer* printer, char* str, size_t str_size);
+size_t sacs_snprintf_field_value(struct SacsStructSnprintfer* printer, char* str, size_t str_size, const struct SacsFieldValueSnprintfer* field_printer);
+size_t sacs_snprintf_field_name_after_value(struct SacsStructSnprintfer* printer, char* str, size_t str_size, const struct SacsFieldValueSnprintfer* field_printer);
+size_t sacs_snprintf_field_separator(struct SacsStructSnprintfer* printer, char* str, size_t str_size);
+
 
 
 
