@@ -12,7 +12,7 @@
 #include "struct_test_sacs_snprintf_int.h"
 #include "struct_test_sacs_snprintf_int_array.h"
 
-
+#include "struct_test_sacs_snprintf_types.h"
 
 
 #include "../src/sacs_util.h"
@@ -48,6 +48,14 @@ static void test_cycle_sacs_snprintf_char(const char* expect_string, const char*
   assert(0 == strcmp(expect_string, result_string));  
   puts(result_string);
 
+
+  struct SacsStructFormat c89_format = SACS_FORMAT_C89;    
+  memset(result_string, 0, sizeof(result_string));
+  const size_t c89_string_size = SACS_SNPRINTF_TYPE(struct_test_sacs_snprintf_char, &test_struct, result_string, sizeof(result_string), &c89_format);  
+  
+  assert(c89_string_size == strlen(result_string)); 
+  puts(result_string);  
+  
   
   struct SacsStructFormat pretty_format = SACS_FORMAT_PRETTY;    
   memset(result_string, 0, sizeof(result_string));
@@ -292,6 +300,66 @@ static void test_cycle_sacs_snprintf_double(const char* expect_string, const cha
 
 
 
+/** Test helper function, will parse then print a test string and compared to the expected string.
+ */
+static void test_cycle_sacs_snprintf_types(const char* expect_string, const char* test_string)
+{
+  struct struct_test_sacs_snprintf_types test_struct = {0};
+  char result_string[256] = {0};
+  struct SacsStructFormat format = SACS_FORMAT_DEFAULT;  
+  
+  
+  const size_t parse_result = SACS_PARSE_TYPE(struct_test_sacs_snprintf_types, &test_struct, test_string);
+  assert(parse_result == strlen(test_string));
+  
+  
+  const size_t result_string_size = SACS_SNPRINTF_TYPE(struct_test_sacs_snprintf_types, &test_struct, result_string, sizeof(result_string), &format);  
+  assert(result_string_size == strlen(expect_string));  
+  assert(0 == strcmp(expect_string, result_string));  
+  puts(result_string);
+
+  
+  struct SacsStructFormat c89_format = SACS_FORMAT_C89;    
+  memset(result_string, 0, sizeof(result_string));
+  const size_t c89_string_size = SACS_SNPRINTF_TYPE(struct_test_sacs_snprintf_types, &test_struct, result_string, sizeof(result_string), &c89_format);  
+  
+  assert(c89_string_size == strlen(result_string)); 
+  puts(result_string);   
+  
+  
+  struct SacsStructFormat pretty_format = SACS_FORMAT_PRETTY;    
+  memset(result_string, 0, sizeof(result_string));
+  const size_t pretty_string_size = SACS_SNPRINTF_TYPE(struct_test_sacs_snprintf_types, &test_struct, result_string, sizeof(result_string), &pretty_format);  
+  
+  assert(pretty_string_size == strlen(result_string)); 
+  puts(result_string);
+  
+  
+  memset(result_string, 0, sizeof(result_string));
+  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_types, &test_struct, result_string, sizeof(result_string));
+  
+  assert(json_string_size == strlen(result_string));  
+  puts(result_string);  
+  
+  
+  memset(result_string, 0, sizeof(result_string));
+  const size_t xml_string_size = SACS_SNPRINTF_TYPE_AS_XML(struct_test_sacs_snprintf_types, &test_struct, result_string, sizeof(result_string));
+  
+  assert(xml_string_size == strlen(result_string));  
+  puts(result_string);
+  
+  
+  memset(result_string, 0, sizeof(result_string));
+  const size_t yaml_string_size = SACS_SNPRINTF_TYPE_AS_YAML(struct_test_sacs_snprintf_types, &test_struct, result_string, sizeof(result_string));
+  
+  assert(yaml_string_size == strlen(result_string));  
+  puts(result_string);  
+  
+}
+
+
+
+
 
 static void test_sacs_snprintf_char(void)
 {
@@ -516,6 +584,35 @@ static void test_sacs_snprintf_double(void)
 
 
 
+
+
+
+
+static void test_sacs_snprintf_types(void)
+{
+  printf("%s\n", __FUNCTION__);
+  
+  
+  // Test 'a'
+  {
+    const char test_string[] = "{"
+                                 ".char_value={.value='a'},"
+                                 ".chars_value={.value=\"Hello World\"},"
+                                 ".double_value={.value=12.345678},"
+                                 ".float_value={.value=12.345678},"
+                                 ".int_value={.value=1}"
+                               "}"; 
+    
+    test_cycle_sacs_snprintf_types(test_string, test_string);
+  }  
+
+}
+
+
+
+
+
+
 void test_sacs_snprintf(void)
 {
   printf("%s\n", __FUNCTION__);
@@ -529,7 +626,8 @@ void test_sacs_snprintf(void)
   test_sacs_snprintf_int_array();
   
   test_sacs_snprintf_float();
-  
+
+  test_sacs_snprintf_types();  
   
 //  struct TestSacsStruct test_struct = {0};
 //
