@@ -13,6 +13,8 @@
 #define SACS_STRUCT struct_test_sacs_snprintf_types
 
 
+
+
 #include "../src/sacs_struct.h"
 #include "struct_test_sacs_snprintf_types.sac"
 
@@ -30,6 +32,8 @@
 
 #include "../src/sacs_yamlable.h"
 #include "struct_test_sacs_snprintf_types.sac"
+
+
 
 
 #endif

@@ -91,25 +91,62 @@
 
 
 
-#define SACS_JSONABLE(_type_name_) \
-  size_t _type_name_##_sacs_snprintf_as_json(struct SacsStructSnprintfer* printer, char* dest, size_t dest_size, const void* value, size_t value_size); \
-  size_t _type_name_##_sacs_snprintf_as_json(struct SacsStructSnprintfer* printer, char* dest, size_t dest_size, const void* value, size_t value_size) \
-  { \
-    SACS_SNPRINTFER(_type_name_, value); \
-    _type_name_##_sacs_snprintfer.format = SACS_JSON_FORMAT_DEFAULT; \
-    return sacs_snprintf(dest, dest_size, &_type_name_##_sacs_snprintfer); \
-  } \
-  size_t _type_name_##_sacs_snprintf_type_as_json(char* dest, size_t dest_size, const void* value, size_t value_size); \
-  size_t _type_name_##_sacs_snprintf_type_as_json(char* dest, size_t dest_size, const void* value, size_t value_size) \
-  { \
-    return _type_name_##_sacs_snprintf_as_json(NULL, dest, dest_size , value, value_size); \
+#define SACS_JSON_FORMAT_PRETTY \
+  (struct SacsStructFormat) { \
+    .str_before_field_name = SACS_JSON_STR_BEFORE_FIELD_NAME, \
+    .str_after_field_name = SACS_JSON_STR_AFTER_FIELD_NAME, \
+    .str_before_field_value = SACS_JSON_STR_BEFORE_FIELD_VALUE, \
+    .str_after_field_value = SACS_JSON_STR_AFTER_FIELD_VALUE, \
+    .str_before_field = SACS_JSON_STR_BEFORE_FIELD, \
+    .str_after_field = SACS_JSON_STR_AFTER_FIELD, \
+    .str_before_array_field = SACS_JSON_STR_BEFORE_ARRAY_FIELD, \
+    .str_after_array_field = SACS_JSON_STR_AFTER_ARRAY_FIELD, \
+    .str_field_name_value_separator = SACS_JSON_STR_FIELD_VALUE_SEPARATOR, \
+    .str_uint8_format = SACS_JSON_STR_UINT8_FORMAT, \
+    .str_uint16_format = SACS_JSON_STR_UINT16_FORMAT, \
+    .str_uint32_format = SACS_JSON_STR_UINT32_FORMAT, \
+    .char_field_value_separator = SACS_JSON_CHAR_FIELD_VALUE_SEPARATOR, \
+    .char_field_separator = SACS_JSON_CHAR_FIELD_SEPARATOR, \
+    .char_struct_begin = SACS_JSON_CHAR_STRUCT_BEGIN, \
+    .char_struct_end = SACS_JSON_CHAR_STRUCT_END, \
+    .char_array_begin = SACS_JSON_CHAR_ARRAY_BEGIN, \
+    .char_array_end = SACS_JSON_CHAR_ARRAY_END, \
+    .char_char_begin = SACS_JSON_CHAR_CHAR_BEGIN, \
+    .char_char_end = SACS_JSON_CHAR_CHAR_END, \
+    .flags = { \
+      .print_field_name_before_value = 1, \
+    } \
   }
 
 
 
 
-#define SACS_SNPRINTF_TYPE_AS_JSON(_type_name_, _src_, _dest_, _dest_size_) \
-  _type_name_##_sacs_snprintf_type_as_json(_dest_, _dest_size_, _src_, sizeof(struct _type_name_))
+#define SACS_JSONABLE(_type_name_) \
+  size_t _type_name_##_sacs_snprintf_as_json(struct SacsStructSnprintfer* printer, char* dest, size_t dest_size, const void* value, size_t value_size, const struct SacsStructFormat* format); \
+  size_t _type_name_##_sacs_snprintf_as_json(struct SacsStructSnprintfer* printer, char* dest, size_t dest_size, const void* value, size_t value_size, const struct SacsStructFormat* format) \
+  { \
+    SACS_SNPRINTFER(_type_name_, value); \
+    if (format) \
+    { \
+      _type_name_##_sacs_snprintfer.format = *format; \
+    } \
+    else \
+    { \
+      _type_name_##_sacs_snprintfer.format = SACS_JSON_FORMAT_DEFAULT; \
+    } \
+    return sacs_snprintf(dest, dest_size, &_type_name_##_sacs_snprintfer); \
+  } \
+  size_t _type_name_##_sacs_snprintf_type_as_json(char* dest, size_t dest_size, const void* value, size_t value_size, const struct SacsStructFormat* format); \
+  size_t _type_name_##_sacs_snprintf_type_as_json(char* dest, size_t dest_size, const void* value, size_t value_size, const struct SacsStructFormat* format) \
+  { \
+    return _type_name_##_sacs_snprintf_as_json(NULL, dest, dest_size , value, value_size, format); \
+  }
+
+
+
+
+#define SACS_SNPRINTF_TYPE_AS_JSON(_type_name_, _src_, _dest_, _dest_size_, _format_) \
+  _type_name_##_sacs_snprintf_type_as_json(_dest_, _dest_size_, _src_, sizeof(struct _type_name_), _format_)
 
 
 

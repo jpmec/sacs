@@ -1,0 +1,5 @@
+struct_begin(struct_test_sacs_snprintf_double_array)
+
+  double_array__(value, 3)
+
+struct_end(struct_test_sacs_snprintf_double_array)

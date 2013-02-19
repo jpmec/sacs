@@ -1,5 +1,5 @@
-struct_begin(struct_test_sacs_snprintf_float)
+struct_begin(struct_test_sacs_snprintf_float_array)
 
-  float__(value)
+  float_array__(value, 3)
 
-struct_end(struct_test_sacs_snprintf_float)
+struct_end(struct_test_sacs_snprintf_float_array)

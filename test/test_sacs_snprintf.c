@@ -8,7 +8,9 @@
 #include "struct_test_sacs_snprintf_char.h"
 #include "struct_test_sacs_snprintf_chars.h"
 #include "struct_test_sacs_snprintf_double.h"
+#include "struct_test_sacs_snprintf_double_array.h"
 #include "struct_test_sacs_snprintf_float.h"
+#include "struct_test_sacs_snprintf_float_array.h"
 #include "struct_test_sacs_snprintf_int.h"
 #include "struct_test_sacs_snprintf_int_array.h"
 
@@ -65,8 +67,9 @@ static void test_cycle_sacs_snprintf_char(const char* expect_string, const char*
   puts(result_string);
   
   
+  struct SacsStructFormat json_default_format = SACS_JSON_FORMAT_DEFAULT; 
   memset(result_string, 0, sizeof(result_string));
-  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_char, &test_struct, result_string, sizeof(result_string));
+  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_char, &test_struct, result_string, sizeof(result_string), &json_default_format);
   
   assert(json_string_size == strlen(result_string));  
   puts(result_string);  
@@ -109,7 +112,7 @@ static void test_cycle_sacs_snprintf_chars(const char* expect_string, const char
   
   
   memset(result_string, 0, sizeof(result_string));
-  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_chars, &test_struct, result_string, sizeof(result_string));
+  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_chars, &test_struct, result_string, sizeof(result_string), NULL);
   
   assert(json_string_size == strlen(result_string));  
   puts(result_string);  
@@ -151,7 +154,7 @@ static void test_cycle_sacs_snprintf_int(const char* expect_string, const char* 
   
   
   memset(result_string, 0, sizeof(result_string));
-  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_int, &test_struct, result_string, sizeof(result_string));
+  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_int, &test_struct, result_string, sizeof(result_string), NULL);
   
   assert(json_string_size == strlen(result_string));  
   puts(result_string);  
@@ -193,7 +196,7 @@ static void test_cycle_sacs_snprintf_int_array(const char* expect_string, const 
   
   
   memset(result_string, 0, sizeof(result_string));
-  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_int_array, &test_struct, result_string, sizeof(result_string));
+  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_int_array, &test_struct, result_string, sizeof(result_string), NULL);
   
   assert(json_string_size == strlen(result_string));  
   puts(result_string);  
@@ -235,7 +238,7 @@ static void test_cycle_sacs_snprintf_float(const char* expect_string, const char
   
   
   memset(result_string, 0, sizeof(result_string));
-  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_float, &test_struct, result_string, sizeof(result_string));
+  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_float, &test_struct, result_string, sizeof(result_string), NULL);
   
   assert(json_string_size == strlen(result_string));  
   puts(result_string);  
@@ -277,7 +280,7 @@ static void test_cycle_sacs_snprintf_double(const char* expect_string, const cha
   
   
   memset(result_string, 0, sizeof(result_string));
-  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_double, &test_struct, result_string, sizeof(result_string));
+  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_double, &test_struct, result_string, sizeof(result_string), NULL);
   
   assert(json_string_size == strlen(result_string));  
   puts(result_string);  
@@ -305,7 +308,7 @@ static void test_cycle_sacs_snprintf_double(const char* expect_string, const cha
 static void test_cycle_sacs_snprintf_types(const char* expect_string, const char* test_string)
 {
   struct struct_test_sacs_snprintf_types test_struct = {0};
-  char result_string[256] = {0};
+  char result_string[512] = {0};
   struct SacsStructFormat format = SACS_FORMAT_DEFAULT;  
   
   
@@ -334,12 +337,22 @@ static void test_cycle_sacs_snprintf_types(const char* expect_string, const char
   assert(pretty_string_size == strlen(result_string)); 
   puts(result_string);
   
-  
+    
+  struct SacsStructFormat json_default_format = SACS_JSON_FORMAT_DEFAULT;
   memset(result_string, 0, sizeof(result_string));
-  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_types, &test_struct, result_string, sizeof(result_string));
+  const size_t json_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_types, &test_struct, result_string, sizeof(result_string), &json_default_format);
   
   assert(json_string_size == strlen(result_string));  
+  puts(result_string);
+  
+
+  struct SacsStructFormat json_pretty_format = SACS_JSON_FORMAT_PRETTY;
+  memset(result_string, 0, sizeof(result_string));
+  const size_t json_pretty_string_size = SACS_SNPRINTF_TYPE_AS_JSON(struct_test_sacs_snprintf_types, &test_struct, result_string, sizeof(result_string), &json_pretty_format);
+  
+  assert(json_pretty_string_size == strlen(result_string));  
   puts(result_string);  
+  
   
   
   memset(result_string, 0, sizeof(result_string));
@@ -599,8 +612,11 @@ static void test_sacs_snprintf_types(void)
                                  ".char_value={.value='a'},"
                                  ".chars_value={.value=\"Hello World\"},"
                                  ".double_value={.value=12.345678},"
-                                 ".float_value={.value=12.345678},"
-                                 ".int_value={.value=1}"
+                                 ".double_array_value={.value={12.345678,-1.234567,0.000000}},"    
+                                 ".float_value={.value=12.345678},"  
+                                 ".float_array_value={.value={12.345678,-1.234567,0.000000}},"   
+                                 ".int_value={.value=1},"
+                                 ".int_array_value={.value={1,2,3}}"
                                "}"; 
     
     test_cycle_sacs_snprintf_types(test_string, test_string);
