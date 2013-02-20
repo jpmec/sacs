@@ -61,9 +61,9 @@ size_t sacs_snprintf_array(struct SacsStructSnprintfer* printer, char* str, size
   size_t array_count = value_size / element_size;
   
   
-  if (printer->format.char_array_begin)
+  if (printer->format.output.str_array_begin)
   {
-    size_t count = snprintf(str, str_size, "%c", printer->format.char_array_begin);
+    size_t count = snprintf(str, str_size, "%s", printer->format.output.str_array_begin);
     str += count;
     str_size -= count;
   }

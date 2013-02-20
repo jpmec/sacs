@@ -41,7 +41,7 @@ size_t sacs_fprintf_array(struct SacsStructFprintfer* printer, FILE* file, const
   assert(value_size);
     
   size_t file_count = 0;
-  file_count += fprintf(file, "%c", printer->format.char_array_begin);
+  file_count += fprintf(file, "%s", printer->format.output.str_array_begin);
   
   size_t array_count = value_size / element_size;
   

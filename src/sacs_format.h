@@ -45,10 +45,15 @@
     .char_field_separator = SACS_CHAR_FIELD_SEPARATOR, \
     .char_struct_begin = SACS_CHAR_STRUCT_BEGIN, \
     .char_struct_end = SACS_CHAR_STRUCT_END, \
-    .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
     .char_array_end = SACS_CHAR_ARRAY_END, \
     .char_char_begin = SACS_CHAR_CHAR_BEGIN, \
     .char_char_end = SACS_CHAR_CHAR_END, \
+    .input = { \
+      .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
+    }, \
+    .output = { \
+      .str_array_begin = SACS_STR_ARRAY_BEGIN, \
+    }, \
     .flags = { \
       .print_field_name_before_value = 1, \
     } \
@@ -73,10 +78,15 @@
     .char_field_separator = SACS_CHAR_FIELD_SEPARATOR, \
     .char_struct_begin = SACS_CHAR_STRUCT_BEGIN, \
     .char_struct_end = SACS_CHAR_STRUCT_END, \
-    .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
     .char_array_end = SACS_CHAR_ARRAY_END, \
     .char_char_begin = SACS_CHAR_CHAR_BEGIN, \
     .char_char_end = SACS_CHAR_CHAR_END, \
+    .input = { \
+      .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
+    }, \
+    .output = { \
+      .str_array_begin = SACS_STR_ARRAY_BEGIN, \
+    }, \
     .flags = { \
       .print_field_name_before_value = 0, \
     } \
@@ -101,10 +111,15 @@
     .char_field_separator = SACS_CHAR_FIELD_SEPARATOR, \
     .char_struct_begin = SACS_CHAR_STRUCT_BEGIN, \
     .char_struct_end = SACS_CHAR_STRUCT_END, \
-    .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
     .char_array_end = SACS_CHAR_ARRAY_END, \
     .char_char_begin = SACS_CHAR_CHAR_BEGIN, \
     .char_char_end = SACS_CHAR_CHAR_END, \
+    .input = { \
+      .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
+    }, \
+    .output = { \
+      .str_array_begin = SACS_STR_ARRAY_BEGIN, \
+    }, \
     .flags = { \
       .print_field_name_before_value = 1, \
     } \
@@ -120,6 +135,22 @@ struct SacsStructFormatFlags
   unsigned print_field_name_before_value : 1;
   unsigned print_field_name_after_value : 1;
   unsigned print_hex_prefix : 1;
+};
+
+
+
+
+struct SacsStructInputFormat
+{
+  char char_array_begin;
+};
+
+
+
+
+struct SacsStructOutputFormat
+{
+  const char* str_array_begin;
 };
 
 
@@ -146,12 +177,16 @@ struct SacsStructFormat
   char char_field_separator;
   char char_struct_begin;
   char char_struct_end; 
-  char char_array_begin;
+//  char char_array_begin;
   char char_array_end;
   char char_char_begin;
   char char_char_end;
   
   int indent_space_count;  ///< Number of spaces for each indent level.
+  
+  
+  struct SacsStructInputFormat input;
+  struct SacsStructOutputFormat output;
   
   struct SacsStructFormatFlags flags;
 };

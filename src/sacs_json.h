@@ -40,6 +40,10 @@
 #define SACS_JSON_CHAR_CHAR_BEGIN    SACS_CHAR_DOUBLE_QUOTE
 #define SACS_JSON_CHAR_CHAR_END      SACS_CHAR_DOUBLE_QUOTE
 
+
+#define SACS_JSON_STR_ARRAY_BEGIN    "["
+#define SACS_JSON_STR_ARRAY_END      "]"
+
 #define SACS_JSON_STR_BEFORE_FIELD_NAME    "\""
 #define SACS_JSON_STR_AFTER_FIELD_NAME     "\""
 
@@ -79,10 +83,15 @@
     .char_field_separator = SACS_JSON_CHAR_FIELD_SEPARATOR, \
     .char_struct_begin = SACS_JSON_CHAR_STRUCT_BEGIN, \
     .char_struct_end = SACS_JSON_CHAR_STRUCT_END, \
-    .char_array_begin = SACS_JSON_CHAR_ARRAY_BEGIN, \
     .char_array_end = SACS_JSON_CHAR_ARRAY_END, \
     .char_char_begin = SACS_JSON_CHAR_CHAR_BEGIN, \
     .char_char_end = SACS_JSON_CHAR_CHAR_END, \
+    .input = { \
+      .char_array_begin = SACS_JSON_CHAR_ARRAY_BEGIN, \
+    }, \
+    .output = { \
+      .str_array_begin = SACS_JSON_STR_ARRAY_BEGIN, \
+    }, \
     .flags = { \
       .print_field_name_before_value = 1, \
     } \
@@ -109,10 +118,15 @@
     .char_field_separator = SACS_JSON_CHAR_FIELD_SEPARATOR, \
     .char_struct_begin = SACS_JSON_CHAR_STRUCT_BEGIN, \
     .char_struct_end = SACS_JSON_CHAR_STRUCT_END, \
-    .char_array_begin = SACS_JSON_CHAR_ARRAY_BEGIN, \
     .char_array_end = SACS_JSON_CHAR_ARRAY_END, \
     .char_char_begin = SACS_JSON_CHAR_CHAR_BEGIN, \
     .char_char_end = SACS_JSON_CHAR_CHAR_END, \
+    .input = { \
+      .char_array_begin = SACS_JSON_CHAR_ARRAY_BEGIN, \
+    }, \
+    .output = { \
+      .str_array_begin = SACS_JSON_STR_ARRAY_BEGIN, \
+    }, \
     .flags = { \
       .print_field_name_before_value = 1, \
     } \

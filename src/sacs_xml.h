@@ -36,6 +36,9 @@
 #define SACS_XML_CHAR_ARRAY_BEGIN    '['
 #define SACS_XML_CHAR_ARRAY_END      ']'
 
+#define SACS_XML_STR_ARRAY_BEGIN     "["
+#define SACS_XML_STR_ARRAY_END       "]"
+
 #define SACS_XML_STR_BEFORE_FIELD_NAME    "<"
 #define SACS_XML_STR_BEFORE_FIELD_NAME_AFTER_VALUE    "</"
 #define SACS_XML_STR_AFTER_FIELD_NAME     ">"
@@ -54,8 +57,13 @@
     .char_field_separator = SACS_XML_CHAR_FIELD_SEPARATOR, \
     .char_struct_begin = SACS_XML_CHAR_STRUCT_BEGIN, \
     .char_struct_end = SACS_XML_CHAR_STRUCT_END, \
-    .char_array_begin = SACS_XML_CHAR_ARRAY_BEGIN, \
     .char_array_end = SACS_XML_CHAR_ARRAY_END, \
+    .input = { \
+      .char_array_begin = SACS_XML_CHAR_ARRAY_BEGIN, \
+    }, \
+    .output = { \
+      .str_array_begin = SACS_XML_STR_ARRAY_BEGIN, \
+    }, \
     .flags = { \
       .print_field_name_before_value = 1, \
       .print_field_name_after_value = 1, \
@@ -66,25 +74,32 @@
 
 
 #define SACS_XMLABLE(_type_name_) \
-  size_t _type_name_##_sacs_snprintf_as_xml(struct SacsStructSnprintfer* printer, char* dest, size_t dest_size, const void* value, size_t value_size); \
-  size_t _type_name_##_sacs_snprintf_as_xml(struct SacsStructSnprintfer* printer, char* dest, size_t dest_size, const void* value, size_t value_size) \
+  size_t _type_name_##_sacs_snprintf_as_xml(struct SacsStructSnprintfer* printer, char* dest, size_t dest_size, const void* value, size_t value_size, const struct SacsStructFormat* format); \
+  size_t _type_name_##_sacs_snprintf_as_xml(struct SacsStructSnprintfer* printer, char* dest, size_t dest_size, const void* value, size_t value_size, const struct SacsStructFormat* format) \
   { \
     SACS_SNPRINTFER(_type_name_, value); \
     _type_name_##_sacs_snprintfer.print_field_name_after_value = sacs_xml_snprintf_field_name_after_value; \
-    _type_name_##_sacs_snprintfer.format = SACS_XML_FORMAT_DEFAULT; \
+    if (format) \
+    { \
+      _type_name_##_sacs_snprintfer.format = *format; \
+    } \
+    else \
+    { \
+      _type_name_##_sacs_snprintfer.format = SACS_XML_FORMAT_DEFAULT; \
+    } \
     return sacs_snprintf(dest, dest_size, &_type_name_##_sacs_snprintfer); \
   } \
-  size_t _type_name_##_sacs_snprintf_type_as_xml(char* dest, size_t dest_size, const void* value, size_t value_size); \
-  size_t _type_name_##_sacs_snprintf_type_as_xml(char* dest, size_t dest_size, const void* value, size_t value_size) \
+  size_t _type_name_##_sacs_snprintf_type_as_xml(char* dest, size_t dest_size, const void* value, size_t value_size, const struct SacsStructFormat* format); \
+  size_t _type_name_##_sacs_snprintf_type_as_xml(char* dest, size_t dest_size, const void* value, size_t value_size, const struct SacsStructFormat* format) \
   { \
-    return _type_name_##_sacs_snprintf_as_xml(NULL, dest, dest_size , value, value_size); \
+    return _type_name_##_sacs_snprintf_as_xml(NULL, dest, dest_size , value, value_size, format); \
   }
 
 
 
 
-#define SACS_SNPRINTF_TYPE_AS_XML(_type_name_, _src_, _dest_, _dest_size_) \
-  _type_name_##_sacs_snprintf_type_as_xml(_dest_, _dest_size_, _src_, sizeof(struct _type_name_))
+#define SACS_SNPRINTF_TYPE_AS_XML(_type_name_, _src_, _dest_, _dest_size_, _format_) \
+  _type_name_##_sacs_snprintf_type_as_xml(_dest_, _dest_size_, _src_, sizeof(struct _type_name_), _format_)
 
 
 

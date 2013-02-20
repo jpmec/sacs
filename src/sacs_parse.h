@@ -128,8 +128,13 @@ SACS_PARSE_FIELD(_type_name_, _field_name_, sacs_parse_float_array, _size_ * siz
       .char_field_separator = SACS_CHAR_FIELD_SEPARATOR, \
       .char_struct_begin = SACS_CHAR_STRUCT_BEGIN, \
       .char_struct_end = SACS_CHAR_STRUCT_END, \
-      .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
       .char_array_end = SACS_CHAR_ARRAY_END, \
+      .input = { \
+        .char_array_begin = SACS_CHAR_ARRAY_BEGIN, \
+      }, \
+      .output = { \
+        .str_array_begin = SACS_STR_ARRAY_BEGIN, \
+      }, \
     }, \
   };
 

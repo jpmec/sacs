@@ -168,7 +168,7 @@ static size_t sacs_parse_array_begin(struct SacsStructParser* parser, const char
   assert(parser);
   assert(str);
   
-  return sacs_skip_char(str, parser->format.char_array_begin);
+  return sacs_skip_char(str, parser->format.input.char_array_begin);
 }
 
 
@@ -795,7 +795,7 @@ size_t sacs_parse_char_string(struct SacsStructParser* parser, void* dest, size_
   
   if (0 == count)
   {
-    count = sacs_skip_char(char_ptr, parser->format.char_array_begin);
+    count = sacs_skip_char(char_ptr, parser->format.input.char_array_begin);
     
     if (count)
     {
