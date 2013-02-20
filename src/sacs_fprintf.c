@@ -55,7 +55,7 @@ size_t sacs_fprintf_array(struct SacsStructFprintfer* printer, FILE* file, const
     
   } while (--array_count);
   
-  file_count += fprintf(file, "%c", printer->format.char_array_end); 
+  file_count += fprintf(file, "%s", printer->format.output.str_array_end); 
   
   return file_count;  
 }

@@ -101,9 +101,9 @@ size_t sacs_snprintf_array(struct SacsStructSnprintfer* printer, char* str, size
     
   } while (--array_count);
   
-  if (printer->format.char_array_end)
+  if (printer->format.output.str_array_end)
   {
-    size_t count = snprintf(str, str_size, "%c", printer->format.char_array_end);
+    size_t count = snprintf(str, str_size, "%s", printer->format.output.str_array_end);
     str += count;
     str_size -= count;  
   }
@@ -305,9 +305,9 @@ size_t sacs_snprintf(char* str, size_t str_size, struct SacsStructSnprintfer* pr
   
   char* char_ptr = str;
   
-  if (printer->format.char_struct_begin)
+  if (printer->format.output.str_struct_begin)
   {
-    size_t count = snprintf(char_ptr, str_size, "%c", printer->format.char_struct_begin);
+    size_t count = snprintf(char_ptr, str_size, "%s", printer->format.output.str_struct_begin);
     char_ptr += count;
     str_size -= count;
   }
@@ -317,9 +317,9 @@ size_t sacs_snprintf(char* str, size_t str_size, struct SacsStructSnprintfer* pr
   char_ptr += count;
   str_size -= count;  
   
-  if (printer->format.char_struct_end)
+  if (printer->format.output.str_struct_end)
   {
-    count = snprintf(char_ptr, str_size, "%c", printer->format.char_struct_end);
+    count = snprintf(char_ptr, str_size, "%s", printer->format.output.str_struct_end);
     char_ptr += count;
     str_size -= count;  
   }

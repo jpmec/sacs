@@ -58,6 +58,9 @@
 #define SACS_JSON_STR_BEFORE_ARRAY_FIELD        NULL
 #define SACS_JSON_STR_AFTER_ARRAY_FIELD         NULL
 
+#define SACS_JSON_STR_STRUCT_BEGIN    "{"
+#define SACS_JSON_STR_STRUCT_END      "}"
+
 #define SACS_JSON_STR_UINT8_FORMAT              "0x%02X"
 #define SACS_JSON_STR_UINT16_FORMAT             "0x%04X"
 #define SACS_JSON_STR_UINT32_FORMAT             "0x%08X"
@@ -81,16 +84,19 @@
     .str_uint32_format = SACS_JSON_STR_UINT32_FORMAT, \
     .char_field_value_separator = SACS_JSON_CHAR_FIELD_VALUE_SEPARATOR, \
     .char_field_separator = SACS_JSON_CHAR_FIELD_SEPARATOR, \
-    .char_struct_begin = SACS_JSON_CHAR_STRUCT_BEGIN, \
-    .char_struct_end = SACS_JSON_CHAR_STRUCT_END, \
-    .char_array_end = SACS_JSON_CHAR_ARRAY_END, \
     .char_char_begin = SACS_JSON_CHAR_CHAR_BEGIN, \
     .char_char_end = SACS_JSON_CHAR_CHAR_END, \
     .input = { \
       .char_array_begin = SACS_JSON_CHAR_ARRAY_BEGIN, \
+      .char_array_end = SACS_JSON_CHAR_ARRAY_END, \
+      .char_struct_begin = SACS_JSON_CHAR_STRUCT_BEGIN, \
+      .char_struct_end = SACS_JSON_CHAR_STRUCT_END, \
     }, \
     .output = { \
       .str_array_begin = SACS_JSON_STR_ARRAY_BEGIN, \
+      .str_array_end = SACS_JSON_STR_ARRAY_END, \
+      .str_struct_begin = SACS_JSON_STR_STRUCT_BEGIN, \
+      .str_struct_end = SACS_JSON_STR_STRUCT_END, \
     }, \
     .flags = { \
       .print_field_name_before_value = 1, \
@@ -116,16 +122,19 @@
     .str_uint32_format = SACS_JSON_STR_UINT32_FORMAT, \
     .char_field_value_separator = SACS_JSON_CHAR_FIELD_VALUE_SEPARATOR, \
     .char_field_separator = SACS_JSON_CHAR_FIELD_SEPARATOR, \
-    .char_struct_begin = SACS_JSON_CHAR_STRUCT_BEGIN, \
-    .char_struct_end = SACS_JSON_CHAR_STRUCT_END, \
-    .char_array_end = SACS_JSON_CHAR_ARRAY_END, \
     .char_char_begin = SACS_JSON_CHAR_CHAR_BEGIN, \
     .char_char_end = SACS_JSON_CHAR_CHAR_END, \
     .input = { \
       .char_array_begin = SACS_JSON_CHAR_ARRAY_BEGIN, \
+      .char_array_end = SACS_JSON_CHAR_ARRAY_END, \
+      .char_struct_begin = SACS_JSON_CHAR_STRUCT_BEGIN, \
+      .char_struct_end = SACS_JSON_CHAR_STRUCT_END, \
     }, \
     .output = { \
       .str_array_begin = SACS_JSON_STR_ARRAY_BEGIN, \
+      .str_array_end = SACS_JSON_STR_ARRAY_END, \
+      .str_struct_begin = SACS_JSON_STR_STRUCT_BEGIN, \
+      .str_struct_end = SACS_JSON_STR_STRUCT_END, \
     }, \
     .flags = { \
       .print_field_name_before_value = 1, \

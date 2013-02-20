@@ -82,6 +82,9 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 #define SACS_STR_BEFORE_ARRAY_FIELD        NULL
 #define SACS_STR_AFTER_ARRAY_FIELD         NULL
 
+#define SACS_STR_STRUCT_BEGIN              "{"
+#define SACS_STR_STRUCT_END                "}"
+
 #define SACS_STR_UINT8_FORMAT              "0x%02X"
 #define SACS_STR_UINT16_FORMAT             "0x%04X"
 #define SACS_STR_UINT32_FORMAT             "0x%08X"

@@ -128,7 +128,7 @@ static size_t sacs_skip_field(struct SacsStructParser* parser, const char* str)
 
     ++char_ptr;
     
-    if (parser->format.char_struct_begin == c)
+    if (parser->format.input.char_struct_begin == c)
     {
       ++indent;
     }
@@ -139,7 +139,7 @@ static size_t sacs_skip_field(struct SacsStructParser* parser, const char* str)
       {
         break;
       }
-      else if (parser->format.char_struct_end == c) 
+      else if (parser->format.input.char_struct_end == c) 
       {
         if (char_ptr > str)
         {
@@ -150,7 +150,7 @@ static size_t sacs_skip_field(struct SacsStructParser* parser, const char* str)
     }
     else
     {
-      if (parser->format.char_struct_end == c) 
+      if (parser->format.input.char_struct_end == c) 
       {
         --indent;
       }      
@@ -179,7 +179,7 @@ static size_t sacs_parse_array_end(struct SacsStructParser* parser, const char* 
   assert(parser);
   assert(str);
   
-  return sacs_skip_char(str, parser->format.char_array_end);
+  return sacs_skip_char(str, parser->format.input.char_array_end);
 }
 
 
@@ -1503,7 +1503,7 @@ static size_t sacs_parse_struct_begin(struct SacsStructParser* parser, const cha
   assert(parser);
   assert(str);
   
-  return sacs_skip_char(str, parser->format.char_struct_begin);
+  return sacs_skip_char(str, parser->format.input.char_struct_begin);
 }
 
 
@@ -1514,7 +1514,7 @@ static size_t sacs_parse_struct_end(struct SacsStructParser* parser, const char*
   assert(parser);
   assert(str);
   
-  return sacs_skip_char(str, parser->format.char_struct_end);
+  return sacs_skip_char(str, parser->format.input.char_struct_end);
 }
 
 
@@ -1570,7 +1570,7 @@ static size_t sacs_parse_unnamed_field(struct SacsStructParser* parser, const st
     return 0;
   }
   
-  if (parser->format.char_struct_end == *str)
+  if (parser->format.input.char_struct_end == *str)
   {
     return 0;
   }  
@@ -1615,7 +1615,7 @@ static size_t sacs_parse_named_field(struct SacsStructParser* parser, const stru
     return 0;
   }
   
-  if (parser->format.char_struct_end == *str)
+  if (parser->format.input.char_struct_end == *str)
   {
     return 0;
   }  
